@@ -29,6 +29,8 @@ Route::middleware([])->controller(CalidadController::class)->prefix('calidad')->
 
 });
 
+
+
 Route::get('/login', function () {
     return view('auth/login');
 })->name("auth.login");
