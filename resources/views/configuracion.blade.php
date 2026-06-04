@@ -56,11 +56,11 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Nombre Completo</label>
-                                <input type="text" value="Iván López" class="w-full px-4 py-3 rounded-2xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none dark:text-white transition-all">
+                                <input type="text" value="{{ auth()->user()->name }}" class="w-full px-4 py-3 rounded-2xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none dark:text-white transition-all">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Correo Electrónico</label>
-                                <input type="email" value="ivan@ejemplo.com" class="w-full px-4 py-3 rounded-2xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none dark:text-white transition-all">
+                                <input type="email" value="{{ auth()->user()->email }}" class="w-full px-4 py-3 rounded-2xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none dark:text-white transition-all">
                             </div>
                             <div class="space-y-2 md:col-span-2">
                                 <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Biografía (Opcional)</label>

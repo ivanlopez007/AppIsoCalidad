@@ -53,7 +53,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <span class="text-xl font-black text-gray-800 dark:text-white tracking-tight italic">SISTEMA</span>
+                    <span class="text-xl font-black text-gray-800 dark:text-white tracking-tight italic">SISTEMA</span> {{auth()->user()->name}}
                 </div>
 
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
