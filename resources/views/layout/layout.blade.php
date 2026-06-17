@@ -53,7 +53,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <span class="text-xl font-black text-gray-800 dark:text-white tracking-tight italic">SISTEMA</span> {{auth()->user()->name}}
+                    <span class="text-xl font-black text-gray-800 dark:text-white tracking-tight italic">SISTEMA</span> {{ Auth::user()->infoUsuario->nombre }} 
                 </div>
 
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -73,7 +73,7 @@
                 ],
                 [
                 'label' => 'Usuarios',
-                'route' => 'usuarios',
+                'route' => 'admin.usuarios',
                 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
                 ],
                 [
@@ -119,18 +119,22 @@
                         Configuración
                     </a>
                     <hr class="border-gray-100 dark:border-gray-700 my-1">
-                    <button class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors font-medium text-left">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        Cerrar sesión
-                    </button>
+                    <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+
+                    <a href="{{ route('auth.logout') }}"
+                        class="TU_CLASE_DE_DISEÑO_AQUÍ"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
                 </div>
 
                 <div class="flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-100 dark:border-gray-600 cursor-pointer group-hover:border-primary transition-all">
                     <img src="https://ui-avatars.com/api/?name=Ivan+Lopez&background=6366f1&color=fff" class="h-9 w-9 rounded-xl object-cover" alt="Avatar">
                     <div class="flex-1 min-w-0">
-                        <p class="text-xs font-bold text-gray-800 dark:text-white truncate">Iván López</p>
+                        <p class="text-xs font-bold text-gray-800 dark:text-white truncate">{{ Auth::user()->email }}</p>
                         <p class="text-[10px] text-gray-500 truncate">Administrador</p>
                     </div>
                     <svg class="w-4 h-4 text-gray-400 group-hover:text-primary transition-transform group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -31,7 +31,7 @@
             </nav>
 
             <div class="flex items-center gap-4">
-                <a href="#" class="text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors hidden sm:block">Iniciar Sesión</a>
+                <a href="{{ route('auth.login') }}" class="text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors hidden sm:block">Iniciar Sesión</a>
                 <a href="#contacto" class="bg-slate-900 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-medium transition-all shadow-sm">
                     Agendar Demo
                 </a>

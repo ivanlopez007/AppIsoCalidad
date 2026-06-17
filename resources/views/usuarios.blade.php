@@ -27,7 +27,7 @@
             </div>
             <div>
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Usuarios</p>
-                <h4 class="text-xl font-bold text-gray-800 dark:text-white">3</h4>
+                <h4 class="text-xl font-bold text-gray-800 dark:text-white">{{ $usuarios->count() }}</h4>
             </div>
         </div>
         <div class="bg-white dark:bg-gray-800 p-5 rounded-3xl border border-gray-100 dark:border-gray-700/50 shadow-sm flex items-center gap-4">
@@ -37,8 +37,8 @@
                 </svg>
             </div>
             <div>
-                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Activos Ahora</p>
-                <h4 class="text-xl font-bold text-gray-800 dark:text-white">2</h4>
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Áreas</p>
+                <h4 class="text-xl font-bold text-gray-800 dark:text-white">{{ $totalAreas ?? 0 }}</h4>
             </div>
         </div>
         <div class="bg-white dark:bg-gray-800 p-5 rounded-3xl border border-gray-100 dark:border-gray-700/50 shadow-sm flex items-center gap-4">
@@ -49,7 +49,7 @@
             </div>
             <div>
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Roles Definidos</p>
-                <h4 class="text-xl font-bold text-gray-800 dark:text-white">2</h4>
+                <h4 class="text-xl font-bold text-gray-800 dark:text-white">{{ $totalRoles ?? 0 }}</h4>
             </div>
         </div>
     </div>
@@ -63,13 +63,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </span>
-                <input type="text" id="inputBusqueda" placeholder="Buscar usuario por nombre o email..." class="w-full pl-11 pr-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl focus:outline-none focus:border-primary dark:text-white placeholder-gray-400 transition-colors">
+                <input type="text" id="inputBusqueda" placeholder="Buscar usuario por email..." class="w-full pl-11 pr-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl focus:outline-none focus:border-primary dark:text-white placeholder-gray-400 transition-colors">
             </div>
             <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                 <select id="selectRol" class="px-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl focus:outline-none focus:border-primary dark:text-white transition-colors">
                     <option value="todos">Todos los roles</option>
-                    <option value="administrador">Administrador</option>
-                    <option value="usuario">Usuario</option>
+                    @foreach($rolesLista ?? [] as $r)
+                    <option value="{{ Str::slug($r->nombre) }}">{{ $r->nombre }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
@@ -77,103 +78,79 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
+                    foreach($areas as $area)
                     <tr class="border-b border-gray-100 dark:border-gray-700/50 text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider bg-gray-50/30 dark:bg-gray-800/30">
-                        <th class="px-6 py-4">Usuario</th>
-                        <th class="px-6 py-4">Email</th>
-                        <th class="px-6 py-4">Rol</th>
+                        <th class="px-6 py-4">Usuario (Correo)</th>
+                        <th class="px-6 py-4">Rol / Área / Localidad</th>
+                        <th class="px-6 py-4">Jefe Inmediato</th>
                         <th class="px-6 py-4">Fecha de Registro</th>
                         <th class="px-6 py-4 text-right">Acciones</th>
                     </tr>
+                    
                 </thead>
                 <tbody id="tablaUsuarios" class="divide-y divide-gray-100 dark:divide-gray-700/40 text-sm">
 
-                    <tr data-name="iván lópez" data-email="ivan.lopez@empresa.com" data-role="administrador" class="hover:bg-gray-50/50 dark:hover:bg-gray-700/20 transition-colors group">
+                    @forelse($usuarios as $usuario)
+                    <tr data-email="{{ Str::lower($usuario->correo) }}" data-role="{{ Str::slug($usuario->rol->nombre ?? '') }}" class="hover:bg-gray-50/50 dark:hover:bg-gray-700/20 transition-colors group">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name=Ivan+Lopez&background=6366f1&color=fff" class="h-10 w-10 rounded-xl object-cover" alt="Avatar">
+                                {{-- Avatar dinámico usando las primeras letras del correo o un patrón estandarizado --}}
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($usuario->correo) }}&background=6366f1&color=fff" class="h-10 w-10 rounded-xl object-cover" alt="Avatar">
                                 <div>
-                                    <p class="font-bold text-gray-800 dark:text-white group-hover:text-primary transition-colors">Iván López</p>
-                                    <span class="text-xs text-gray-400">ID: #1</span>
+                                    <p class="font-bold text-gray-800 dark:text-white group-hover:text-primary transition-colors truncate max-w-xs">
+                                        {{ $usuario->correo }}
+                                    </p>
+                                    <span class="text-xs text-gray-400">ID: #{{ $usuario->id }}</span>
+                                    <!-- <span class="text-xs text-gray-400">NOMBRE: #{{ $usuario->nombre }}</span>  ahorita poner-->
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-300">ivan.lopez@empresa.com</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="px-6 py-4 whitespace-nowrap space-y-1">
                             <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/50 text-primary">
-                                Administrador
+                                {{ $usuario->rol->nombre ?? 'Sin Rol' }}
                             </span>
+                            <div class="text-xs text-gray-400">
+                                <span>📍 {{ $usuario->localidad->localidad ?? 'N/A' }}</span> |
+                                <span>💼 {{ $usuario->area->area ?? 'N/A' }}</span>
+                            </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400 text-xs">01 Jun, 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-300 text-xs">
+                            @if($usuario->jefeInmediato)
+                            <span class="font-medium text-gray-700 dark:text-gray-200">{{ $usuario->jefeInmediato->email }}</span>
+                            @else
+                            <span class="text-gray-400 italic">Ninguno (Alto Mando)</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400 text-xs">
+                            {{ $usuario->created_at ? $usuario->created_at->format('d M, Y') : 'N/A' }}
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex items-center justify-end gap-2">
-                                <button class="p-2 text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <button class="p-2 text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg></button>
-                                <button class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    </svg>
+                                </button>
+                                <button class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg></button>
+                                    </svg>
+                                </button>
                             </div>
                         </td>
                     </tr>
-
-                    <tr data-name="alejandro gómez" data-email="alejandro.gomez@empresa.com" data-role="usuario" class="hover:bg-gray-50/50 dark:hover:bg-gray-700/20 transition-colors group">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name=Alejandro+Gomez&background=e0e7ff&color=6366f1" class="h-10 w-10 rounded-xl object-cover" alt="Avatar">
-                                <div>
-                                    <p class="font-bold text-gray-800 dark:text-white group-hover:text-primary transition-colors">Alejandro Gómez</p>
-                                    <span class="text-xs text-gray-400">ID: #2</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-300">alejandro.gomez@empresa.com</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                                Usuario
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400 text-xs">28 May, 2026</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div class="flex items-center justify-end gap-2">
-                                <button class="p-2 text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg></button>
-                                <button class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg></button>
-                            </div>
+                    @empty
+                    <tr id="sinResultadosServidor">
+                        <td colspan="5" class="px-6 py-12 text-center text-gray-400 dark:text-gray-500">
+                            <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <p class="font-bold">No hay usuarios registrados en el sistema</p>
                         </td>
                     </tr>
+                    @endforelse
 
-                    <tr data-name="maría fernanda" data-email="maria.fer@empresa.com" data-role="usuario" class="hover:bg-gray-50/50 dark:hover:bg-gray-700/20 transition-colors group">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name=Maria+Fernanda&background=e0e7ff&color=6366f1" class="h-10 w-10 rounded-xl object-cover" alt="Avatar">
-                                <div>
-                                    <p class="font-bold text-gray-800 dark:text-white group-hover:text-primary transition-colors">María Fernanda</p>
-                                    <span class="text-xs text-gray-400">ID: #3</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-300">maria.fer@empresa.com</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                                Usuario
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400 text-xs">15 May, 2026</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div class="flex items-center justify-end gap-2">
-                                <button class="p-2 text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg></button>
-                                <button class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg></button>
-                            </div>
-                        </td>
-                    </tr>
-
+                    {{-- Elemento reservado para el filtrado JS interactivo --}}
                     <tr id="sinResultados" class="hidden">
                         <td colspan="5" class="px-6 py-12 text-center text-gray-400 dark:text-gray-500">
                             <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,8 +165,11 @@
             </table>
         </div>
 
+        {{-- Paginación / Contador --}}
         <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700/50 bg-gray-50/30 dark:bg-gray-800/30 flex justify-between items-center">
-            <span id="contadorVisual" class="text-xs text-gray-500">Mostrando 3 de 3 resultados</span>
+            <span id="contadorVisual" class="text-xs text-gray-500">
+                Mostrando {{ $usuarios->count() }} de {{ $usuarios->count() }} resultados
+            </span>
             <div class="flex gap-2">
                 <button class="px-3 py-1.5 text-xs bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-400 cursor-not-allowed" disabled>Anterior</button>
                 <button class="px-3 py-1.5 text-xs bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:border-primary transition-colors">Siguiente</button>
@@ -203,7 +183,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         const inputBusqueda = document.getElementById("inputBusqueda");
         const selectRol = document.getElementById("selectRol");
-        const filas = document.querySelectorAll("#tablaUsuarios tr:not(#sinResultados)");
+        const filas = document.querySelectorAll("#tablaUsuarios tr:not(#sinResultados):not(#sinResultadosServidor)");
         const filaSinResultados = document.getElementById("sinResultados");
         const contadorVisual = document.getElementById("contadorVisual");
 
@@ -213,17 +193,12 @@
             let visibles = 0;
 
             filas.forEach(fila => {
-                const nombre = fila.getAttribute("data-name");
-                const email = fila.getAttribute("data-email");
-                const rol = fila.getAttribute("data-role");
+                const email = fila.getAttribute("data-email") || "";
+                const rol = fila.getAttribute("data-role") || "";
 
-                // Condición 1: Buscar coincidencia en nombre o email
-                const coincideBusqueda = nombre.includes(busqueda) || email.includes(busqueda);
-
-                // Condición 2: Buscar coincidencia en rol
+                const coincideBusqueda = email.includes(busqueda);
                 const coincideRol = (rolSeleccionado === "todos") || (rol === rolSeleccionado);
 
-                // Si cumple ambas condiciones se muestra, si no, se oculta
                 if (coincideBusqueda && coincideRol) {
                     fila.classList.remove("hidden");
                     visibles++;
@@ -232,18 +207,15 @@
                 }
             });
 
-            // Control de estado vacío (Empty state)
-            if (visibles === 0) {
+            if (visibles === 0 && filas.length > 0) {
                 filaSinResultados.classList.remove("hidden");
             } else {
                 filaSinResultados.classList.add("hidden");
             }
 
-            // Actualizar contador de forma dinámica
             contadorVisual.textContent = `Mostrando ${visibles} de ${filas.length} resultados`;
         }
 
-        // Escuchar eventos en tiempo real
         inputBusqueda.addEventListener("input", filtrar);
         selectRol.addEventListener("change", filtrar);
     });
