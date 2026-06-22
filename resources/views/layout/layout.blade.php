@@ -43,11 +43,12 @@
 <body class="h-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300 overflow-hidden">
 
     @php
-    $rolId = Auth::user()->rol_id ?? null;
+    $rol = Auth::user()->rol->nombre ?? null;
+
     $seccionNombre = '';
     $menuConfig = [];
 
-    if ($rolId == 1) {
+    if ($rol == 'admin') {
     $seccionNombre = 'Gerencia';
     $menuConfig = [
     [
@@ -71,7 +72,7 @@
     'hijos' => [] // Enlace directo sin submenú
     ]
     ];
-    } elseif ($rolId == 2) {
+    } elseif ($rol == 'calidad') {
     $seccionNombre = 'Calidad';
     $menuConfig = [
     [
@@ -95,8 +96,8 @@
     'hijos' => []
     ]
     ];
-    } elseif ($rolId == 3) {
-    $seccionNombre = 'Asociados';
+    } elseif ($rol == 'colaborador') {
+    $seccionNombre = 'Colaborador';
     $menuConfig = [
     [
     'nombre' => 'Control de Documentos',
@@ -202,6 +203,11 @@
 
             <div class="p-4 border-t border-gray-100 dark:border-gray-700 relative group flex-shrink-0">
                 <div class="absolute bottom-20 left-4 right-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl invisible opacity-0 scale-95 group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 z-50 p-2 space-y-1">
+
+                    <a href="{{ route('auth.logout') }}" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium"" onclick=" event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-user-alt w-4"></i> <span>Usuarios</span>
+                    </a>
+                    <hr class="border-gray-100 dark:border-gray-700 my-1">
                     <button onclick="document.documentElement.classList.toggle('dark')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
                         <i class="fas fa-moon text-gray-400 w-4"></i> Modo Oscuro
                     </button>
@@ -211,6 +217,7 @@
                     <a href="{{ route('auth.logout') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors font-medium" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fas fa-sign-out-alt w-4"></i> <span>Cerrar Sesión</span>
                     </a>
+
                 </div>
 
                 <div class="flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-100 dark:border-gray-600 cursor-pointer group-hover:border-primary transition-all">

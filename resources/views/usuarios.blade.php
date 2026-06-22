@@ -55,15 +55,27 @@
             </div>
         </div>
     </div>
-    @if(session('success'))
-    <div class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+    @if (session('success'))
+    <div x-data="{ show: true }"
+        x-init="setTimeout(() => show = false, 3000)"
+        x-show="show"
+        x-transition.duration.500ms
+        class="fixed bottom-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+
         {{ session('success') }}
-        //solo quiero que dure 3 segundos el mensaje de exito
-        <script>
-            setTimeout(function() {
-                document.querySelector('.fixed').remove();
-            }, 3000);
-        </script>
+
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div x-data="{ show: true }"
+        x-init="setTimeout(() => show = false, 3000)"
+        x-show="show"
+        x-transition.duration.500ms
+        class="fixed bottom-5 right-5 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+
+        {{ session('error') }}
+
     </div>
     @endif
 

@@ -52,42 +52,66 @@ class AdminController extends Controller
     }
 
 
-    public function crearUsuario(Request $request){
+    public function crearUsuario(Request $request)
+    {
 
-    // no me funciona el return redirect()->route('admin.usuarios')->with('success', 'Usuario creado exitosamente.'); --- IGNORE ---    
-        // Validar los datos del formulario
-        $validatedData = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'apellido_paterno' => 'required|string|max:255',
-            'apellido_materno' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:usuarios,email',
-            'password' => 'required|string|min:6|confirmed',
-            'rol_id' => 'required|exists:rols,id',
-            'area_id' => 'required|exists:areas,id',
-            'localidad_id' => 'required|exists:localidads,id',
-            'jefe_inmediato_id' => 'nullable|exists:usuarios,id',
-        ]);
+        try {
+            // Validar los datos del formulario
+            $validatedData = $request->validate([
+                'nombre' => 'required|string|max:255',
+                'apellido_paterno' => 'required|string|max:255',
+                'apellido_materno' => 'nullable|string|max:255',
+                'email' => 'required|email|unique:usuarios,email',
+                'password' => 'required|string|min:6|confirmed',
+                'rol_id' => 'required|exists:rols,id',
+                'area_id' => 'required|exists:areas,id',
+                'localidad_id' => 'required|exists:localidads,id',
+                'jefe_inmediato_id' => 'nullable|exists:usuarios,id',
+            ]);
 
-        $usuario = Usuario::create([
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
-            'rol_id' => $validatedData['rol_id'],
-            'area_id' => $validatedData['area_id'],
-            'localidad_id' => $validatedData['localidad_id'],
-            'jefe_inmediato_id' => $validatedData['jefe_inmediato_id'] ?? null,
-        ]);
 
-        $infoUsuario = $usuario->infoUsuario()->create([
-            'nombre' => $validatedData['nombre'],
-            'apellido_paterno' => $validatedData['apellido_paterno'],
-            'apellido_materno' => $validatedData['apellido_materno'] ?? null,
-        ]);
+            //Crear el usuario        
+            $usuario = Usuario::create([
+                'email' => $validatedData['email'],
+                'password' => bcrypt($validatedData['password']),
+                'rol_id' => $validatedData['rol_id'],
+                'area_id' => $validatedData['area_id'],
+                'localidad_id' => $validatedData['localidad_id'],
+                'jefe_inmediato_id' => $validatedData['jefe_inmediato_id'] ?? null,
+            ]);
 
-        $usuario->save();
-        $infoUsuario->save();
+            // Crear la información relacionada en la tabla info_usuario
+            $infoUsuario = $usuario->infoUsuario()->create([
+                'nombre' => $validatedData['nombre'],
+                'apellido_paterno' => $validatedData['apellido_paterno'],
+                'apellido_materno' => $validatedData['apellido_materno'] ?? null,
+            ]);
 
-        return redirect()->route('admin.usuarios')->with('success', 'Usuario creado exitosamente.');
-        
+            // Guardar el usuario y su información relacionada
+            $usuario->save();
+            $infoUsuario->save();
 
+            return redirect()->route('admin.usuarios')->with('success', 'Usuario creado exitosamente.');
+        } catch (\Exception $e) {
+            // Manejar cualquier error que ocurra durante la creación del usuario
+            return redirect()->route('admin.usuarios')->with('error', 'Ocurrió un error al crear el usuario: ' . $e->getMessage());
+        }
+    }
+
+    public function solicitarCambio()
+    {
+        return view('solicitar_cambio');
+    }
+    public function aprobacion()
+    {
+        return view('aprobacion');
+    }
+    public function historial()
+    {
+        return view('historial');
+    }
+    public function formato()
+    {
+        return view('formato');
     }
 }

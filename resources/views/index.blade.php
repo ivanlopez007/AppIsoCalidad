@@ -76,7 +76,7 @@
                             <span class="w-3 h-3 rounded-full bg-red-400"></span>
                             <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
                             <span class="w-3 h-3 rounded-full bg-green-400"></span>
-                            <span class="text-xs text-slate-400 ml-4 bg-slate-100 px-4 py-1 rounded-md w-full max-w-xs truncate">appisocalidad.com/dashboard</span>
+                            <span class="text-xs text-slate-400 ml-4 bg-slate-100 px-4 py-1 rounded-md w-full max-w-xs truncate">quasys.com/dashboard</span>
                         </div>
                         <!-- Mini maqueta del Dashboard -->
                         <div class="grid grid-cols-3 gap-3">

@@ -30,6 +30,7 @@ Route::middleware([],)->controller(AuthController::class)->prefix('auth')->group
     Route::get('/', 'configuracion')->name('admin.configuracion');
         
     // Route::resource('/documento', )->name('document')
+    
 });
 
 Route::middleware([])->controller(AdminController::class)->prefix('admin')->group(function(){
@@ -41,6 +42,12 @@ Route::middleware([])->controller(AdminController::class)->prefix('admin')->grou
     Route::get('crear-usuario', 'showCrearUsuario')->name('admin.crear_usuario');
     Route::post('crear-usuario', 'crearUsuario')->name('admin.crear_usuario.post');
 
+
+
+    Route::get('/solicitar-cambio', 'solicitarCambio')->name('admin.solicitar_cambio');
+    Route::get('/aprobacion', 'aprobacion')->name('admin.aprobacion');
+    Route::get('historial', 'historial')->name('admin.historial');
+    Route::get('formato', 'formato')->name('admin.formato');
 });
 
 
