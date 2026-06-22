@@ -11,7 +11,7 @@ class Rol extends Model
 {
     use HasFactory;
 
-    protected $table = 'rol'; // Esto le dice que use la tabla en singular
+    protected $table = 'rols'; // Esto le dice que use la tabla en plural
     protected $fillable = ['nombre'];
 
     /**

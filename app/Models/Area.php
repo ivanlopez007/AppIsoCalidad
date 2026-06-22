@@ -10,7 +10,7 @@ class Area extends Model
 
     use HasFactory;
 
-    protected $table = 'area';
+    protected $table = 'areas'; // Esto le dice que use la tabla en plural
     protected $fillable = ['area'];
 
 

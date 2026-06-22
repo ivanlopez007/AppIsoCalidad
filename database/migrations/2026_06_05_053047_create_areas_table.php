@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('area', function (Blueprint $table) {
+       Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->string('area'); // Nombre del departamento (ej. Calidad, Sistemas)
             $table->timestamps();

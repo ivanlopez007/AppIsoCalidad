@@ -18,6 +18,8 @@
         </button>
     </div>
 
+
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="bg-white dark:bg-gray-800 p-5 rounded-3xl border border-gray-100 dark:border-gray-700/50 shadow-sm flex items-center gap-4">
             <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-950/40 rounded-2xl flex items-center justify-center text-primary">
@@ -53,6 +55,17 @@
             </div>
         </div>
     </div>
+    @if(session('success'))
+    <div class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+        {{ session('success') }}
+        //solo quiero que dure 3 segundos el mensaje de exito
+        <script>
+            setTimeout(function() {
+                document.querySelector('.fixed').remove();
+            }, 3000);
+        </script>
+    </div>
+    @endif
 
     <div class="bg-white dark:bg-gray-800 rounded-4xl border border-gray-100 dark:border-gray-700/70 shadow-sm overflow-hidden">
 
@@ -78,7 +91,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    foreach($areas as $area)
+
                     <tr class="border-b border-gray-100 dark:border-gray-700/50 text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider bg-gray-50/30 dark:bg-gray-800/30">
                         <th class="px-6 py-4">Usuario (Correo)</th>
                         <th class="px-6 py-4">Rol / Área / Localidad</th>
@@ -86,9 +99,10 @@
                         <th class="px-6 py-4">Fecha de Registro</th>
                         <th class="px-6 py-4 text-right">Acciones</th>
                     </tr>
-                    
+
                 </thead>
                 <tbody id="tablaUsuarios" class="divide-y divide-gray-100 dark:divide-gray-700/40 text-sm">
+
 
                     @forelse($usuarios as $usuario)
                     <tr data-email="{{ Str::lower($usuario->correo) }}" data-role="{{ Str::slug($usuario->rol->nombre ?? '') }}" class="hover:bg-gray-50/50 dark:hover:bg-gray-700/20 transition-colors group">
@@ -98,7 +112,7 @@
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($usuario->correo) }}&background=6366f1&color=fff" class="h-10 w-10 rounded-xl object-cover" alt="Avatar">
                                 <div>
                                     <p class="font-bold text-gray-800 dark:text-white group-hover:text-primary transition-colors truncate max-w-xs">
-                                        {{ $usuario->correo }}
+                                        {{ $usuario->email }}
                                     </p>
                                     <span class="text-xs text-gray-400">ID: #{{ $usuario->id }}</span>
                                     <!-- <span class="text-xs text-gray-400">NOMBRE: #{{ $usuario->nombre }}</span>  ahorita poner-->

@@ -9,7 +9,7 @@ class Localidad extends Model
 {
     use HasFactory;
 
-    protected $table = 'localidad';
+    protected $table = 'localidads'; // Esto le dice que use la tabla en plural
     protected $fillable = ['localidad'];
 
     /**

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('password');
 
             // Llaves foráneas hacia las otras tablas
-            $table->foreignId('rol_id')->constrained('rol');
-            $table->foreignId('localidad_id')->constrained('localidad');
-            $table->foreignId('area_id')->constrained('area');
+            $table->foreignId('rol_id')->constrained('rols');
+            $table->foreignId('localidad_id')->constrained('localidads');
+            $table->foreignId('area_id')->constrained('areas');
 
             // Relación recursiva (jefe inmediato)
             $table->unsignedBigInteger('jefe_inmediato_id')->nullable();

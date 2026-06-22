@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <form action="#" method="POST" class="p-8 md:p-10 space-y-8">
+        <form action="{{ route('admin.crear_usuario.post') }}" method="POST" class="p-8 md:p-10 space-y-8">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -54,26 +54,26 @@
 
                 <div class="flex flex-col">
                     <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Rol</label>
-                    <select name="rol" class="border @error('rol') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition cursor-pointer dark:bg-gray-800 shadow-sm">
+                    <select name="rol_id" class="border @error('rol_id') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition cursor-pointer dark:bg-gray-800 shadow-sm">
                         <option value="" disabled selected class="dark:bg-gray-800">Seleccione rol</option>
                         @foreach($roles as $rol)
-                        <option value="{{ $rol->id }}" {{ old('rol') == $rol->id ? 'selected' : '' }} class="dark:bg-gray-800">{{ $rol->nombre }}</option>
+                        <option value="{{ $rol->id }}" {{ old('rol_id') == $rol->id ? 'selected' : '' }} class="dark:bg-gray-800">{{ $rol->nombre }}</option>
                         @endforeach
                     </select>
-                    @error('rol')
+                    @error('rol_id')
                     <span class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="flex flex-col">
                     <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Área</label>
-                    <select name="area" class="border @error('area') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition cursor-pointer dark:bg-gray-800 shadow-sm">
+                    <select name="area_id" class="border @error('area_id') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition cursor-pointer dark:bg-gray-800 shadow-sm">
                         <option value="" disabled selected class="dark:bg-gray-800">Seleccione área</option>
                         @foreach($areas as $area)
-                        <option value="{{ $area->id }}" {{ old('area') == $area->id ? 'selected' : '' }} class="dark:bg-gray-800">{{ $area->area }}</option>
+                        <option value="{{ $area->id }}" {{ old('area_id') == $area->id ? 'selected' : '' }} class="dark:bg-gray-800">{{ $area->area }}</option>
                         @endforeach
                     </select>
-                    @error('area')
+                    @error('area_id')
                     <span class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</span>
                     @enderror
                 </div>
@@ -89,43 +89,58 @@
 
                 <div class="flex flex-col">
                     <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Correo Electrónico</label>
-                    <input type="email" name="correo" value="{{ old('correo') }}"
-                        class="border @error('correo') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition placeholder-gray-400 dark:placeholder-gray-500 shadow-sm" placeholder="usuario@empresa.com">
-                    @error('correo')
+                    <input type="email" name="email" value="{{ old('email') }}"
+                        class="border @error('email') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition placeholder-gray-400 dark:placeholder-gray-500 shadow-sm" placeholder="usuario@empresa.com">
+                    @error('email')
                     <span class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="flex flex-col">
                     <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Localidad</label>
-                    <select name="localidad" class="border @error('localidad') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition cursor-pointer dark:bg-gray-800 shadow-sm">
+                    <select name="localidad_id" class="border @error('localidad_id') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition cursor-pointer dark:bg-gray-800 shadow-sm">
                         <option value="" disabled selected class="dark:bg-gray-800">Seleccione localidad</option>
                         @foreach($localidades as $localidad)
-                        <option value="{{ $localidad->id }}"class="dark:bg-gray-800">{{ $localidad->localidad }}</option>
+                        <option value="{{ $localidad->id }}" {{ old('localidad_id') == $localidad->id ? 'selected' : '' }} class="dark:bg-gray-800">{{ $localidad->localidad }}</option>
                         @endforeach
                     </select>
-                    @error('localidad')
+                    @error('localidad_id')
                     <span class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="flex flex-col">
                     <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Supervisor Directo</label>
-                    <select name="supervisor_id" class="border @error('supervisor_id') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition cursor-pointer dark:bg-gray-800 shadow-sm">
+                    <select name="jefe_inmediato_id" class="border @error('jefe_inmediato_id') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition cursor-pointer dark:bg-gray-800 shadow-sm">
                         <option value="" disabled selected class="dark:bg-gray-800">Seleccione supervisor</option>
                         @if(isset($usuarios))
-                        @foreach($usuarios as $usuario)
-                        <option value="{{ $usuario->id }}" class="dark:bg-gray-800">
-                            {{ $usuario->infoUsuario->apellido_materno }} {{ $usuario->infoUsuario->apellido_paterno }}
+                        @foreach($usuarios as $usr)
+                        <option value="{{ $usr->id }}" {{ old('jefe_inmediato_id') == $usr->id ? 'selected' : '' }} class="dark:bg-gray-800">
+                            {{ $usr->infoUsuario->nombre ?? 'Usuario' }} {{ $usr->infoUsuario->apellido_paterno ?? '' }}
                         </option>
                         @endforeach
                         @else
                         <option value="" disabled class="dark:bg-gray-800">Carga los supervisores en el controlador</option>
                         @endif
                     </select>
-                    @error('supervisor_id')
+                    @error('jefe_inmediato_id')
                     <span class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</span>
                     @enderror
+                </div>
+
+                <div class="flex flex-col">
+                    <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Contraseña</label>
+                    <input type="password" name="password"
+                        class="border @error('password') border-red-500 dark:border-red-500 @else border-gray-200 dark:border-gray-700 @enderror bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition placeholder-gray-400 dark:placeholder-gray-500 shadow-sm" placeholder="******">
+                    @error('password')
+                    <span class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex flex-col">
+                    <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Confirmar Contraseña</label>
+                    <input type="password" name="password_confirmation"
+                        class="border border-gray-200 dark:border-gray-700 bg-transparent p-3.5 rounded-xl text-gray-800 dark:text-white text-base focus:ring-2 focus:ring-primary focus:border-primary outline-none transition placeholder-gray-400 dark:placeholder-gray-500 shadow-sm" placeholder="******">
                 </div>
 
             </div>
@@ -139,6 +154,8 @@
                 </button>
             </div>
         </form>
+
+   
     </div>
 </div>
 

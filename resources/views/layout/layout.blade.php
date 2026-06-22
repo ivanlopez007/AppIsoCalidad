@@ -4,20 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Todo-en-Uno</title>
+    <title>Quasys - Dashboard</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: '#6366f1',
+                        primary: '#6366f1'
                     },
                     borderRadius: {
-                        '4xl': '2rem',
+                        '4xl': '2rem'
                     }
                 }
             }
@@ -25,7 +29,6 @@
     </script>
 
     <style>
-        /* Estilo para ocultar scrollbar pero mantener funcionalidad */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -39,23 +42,100 @@
 
 <body class="h-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300 overflow-hidden">
 
+    @php
+    $rolId = Auth::user()->rol_id ?? null;
+    $seccionNombre = '';
+    $menuConfig = [];
+
+    if ($rolId == 1) {
+    $seccionNombre = 'Gerencia';
+    $menuConfig = [
+    [
+    'nombre' => 'Control de Documentos',
+    'icono' => 'fas fa-chart-pie',
+    'hijos' => [
+    ['nombre' => 'Solicitud de cambios', 'ruta' => 'solicitudes.cambios'],
+    ['nombre' => 'Aprobación de Solicitud', 'ruta' => 'solicitudes.aprobacion'],
+    ['nombre' => 'Revision de Solicitudes', 'ruta' => 'solicitudes.revision'],
+    ['nombre' => 'Consulta de documentos', 'ruta' => 'documentos.consulta'],
+    ['nombre' => 'Historial de documentos', 'ruta' => 'documentos.historial'],
+    ['nombre' => 'Matriz de documentos', 'ruta' => 'documentos.matriz'],
+    ['nombre' => 'Revisión de documentos', 'ruta' => 'documentos.revision'],
+    ['nombre' => 'Hoja de Tarea Estándar', 'ruta' => 'documentos.hoja_tarea']
+    ]
+    ],
+    [
+    'nombre' => 'Training Tracker',
+    'icono' => 'fas fa-graduation-cap',
+    'ruta' => 'training.tracker',
+    'hijos' => [] // Enlace directo sin submenú
+    ]
+    ];
+    } elseif ($rolId == 2) {
+    $seccionNombre = 'Calidad';
+    $menuConfig = [
+    [
+    'nombre' => 'Control de Documentos',
+    'icono' => 'fas fa-shield-halved',
+    'hijos' => [
+    ['nombre' => 'Solicitud de cambios', 'ruta' => 'solicitudes.cambios'],
+    ['nombre' => 'Aprobación de Solicitud', 'ruta' => 'solicitudes.aprobacion'],
+    ['nombre' => 'Revision de Solicitudes', 'ruta' => 'solicitudes.revision'],
+    ['nombre' => 'Consulta de documentos', 'ruta' => 'documentos.consulta'],
+    ['nombre' => 'Historial de documentos', 'ruta' => 'documentos.historial'],
+    ['nombre' => 'Matriz de documentos', 'ruta' => 'documentos.matriz'],
+    ['nombre' => 'Revisión de documentos', 'ruta' => 'documentos.revision'],
+    ['nombre' => 'Hoja de Tarea Estándar', 'ruta' => 'documentos.hoja_tarea']
+    ]
+    ],
+    [
+    'nombre' => 'Training Tracker',
+    'icono' => 'fas fa-graduation-cap',
+    'ruta' => 'training.tracker',
+    'hijos' => []
+    ]
+    ];
+    } elseif ($rolId == 3) {
+    $seccionNombre = 'Asociados';
+    $menuConfig = [
+    [
+    'nombre' => 'Control de Documentos',
+    'icono' => 'fas fa-user-tie',
+    'hijos' => [
+    ['nombre' => 'Solicitud de cambios', 'ruta' => 'solicitudes.cambios'],
+    ['nombre' => 'Aprobación de solicitudes de nivel superior', 'ruta' => 'solicitudes.nivel_superior'],
+    ['nombre' => 'Aprobación de solicitudes THE', 'ruta' => 'solicitudes.the'],
+    ['nombre' => 'Estatus de Solicitudes', 'ruta' => 'solicitudes.estatus'],
+    ['nombre' => 'Consulta de documentos', 'ruta' => 'documentos.consulta'],
+    ['nombre' => 'Historial de documentos', 'ruta' => 'documentos.historial'],
+    ['nombre' => 'Matriz de documentos', 'ruta' => 'documentos.matriz'],
+    ['nombre' => 'Revisión de documentos', 'ruta' => 'documentos.revision']
+    ]
+    ],
+    [
+    'nombre' => 'Training Tracker',
+    'icono' => 'fas fa-graduation-cap',
+    'ruta' => 'training.tracker',
+    'hijos' => []
+    ]
+    ];
+    }
+
+    @endphp
+
     <div class="flex h-screen overflow-hidden relative">
 
         <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity duration-300 opacity-0"></div>
 
+        <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 lg:static lg:h-screen transition-transform duration-300 ease-in-out">
 
-        <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 lg:static lg:h-screen transition-transform duration-300 ease-in-out">
-
-            <div class="h-20 flex items-center justify-between px-6">
+            <div class="h-20 flex items-center justify-between px-6 flex-shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="h-10 w-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
+                        <i class="fas fa-layer-group text-white text-lg"></i>
                     </div>
-                    <span class="text-xl font-black text-gray-800 dark:text-white tracking-tight italic">SISTEMA</span> {{ Auth::user()->infoUsuario->nombre }} 
+                    <span class="text-xl font-black text-gray-800 dark:text-white tracking-tight">QUASYS</span>
                 </div>
-
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -63,79 +143,81 @@
                 </button>
             </div>
 
-            <nav class="flex-1 px-4 py-2 space-y-2 overflow-y-auto no-scrollbar">
-                @php
-                $navItems = [
-                [
-                'label' => 'Dashboard',
-                'route' => 'usuario',
-                'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
-                ],
-                [
-                'label' => 'Usuarios',
-                'route' => 'admin.usuarios',
-                'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
-                ],
-                [
-                'label' => 'Ventas',
-                'route' => 'usuario',
-                'icon' => 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
-                ],
-                [
-                'label' => 'Reportes',
-                'route' => 'usuario',
-                'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'
-                ],
-                [
-                'label' => 'Ajustes',
-                'route' => 'configuracion',
-                'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'
-                ],
-                ];
-                @endphp
+            <nav class="flex-1 px-4 py-2 space-y-4 overflow-y-auto no-scrollbar">
+                @if(!empty($menuConfig))
+                <div class="space-y-1">
+                    <p class="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest ml-4 mb-2">
+                        *{{ $seccionNombre }}
+                    </p>
 
-                @foreach($navItems as $item)
-                @php
-                $active = request()->routeIs($item['route']);
-                @endphp
+                    @foreach ($menuConfig as $item)
+                    @php
+                    $tieneHijos = !empty($item['hijos']);
 
-                <a href="{{ Route::has($item['route']) ? route($item['route']) : '#' }}"
-                    class="flex items-center px-4 py-3 rounded-2xl transition-all duration-200 group {{ $active ? 'bg-primary text-white shadow-lg shadow-indigo-100 dark:shadow-none font-bold' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
-                    <svg class="w-5 h-5 mr-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon'] }}" />
-                    </svg>
-                    <span>{{ $item['label'] }}</span>
-                </a>
-                @endforeach
+                    // Auto-desplegar submenú si el usuario está dentro de una de las rutas hijas
+                    $menuAbierto = false;
+                    if ($tieneHijos) {
+                    foreach ($item['hijos'] as $hijo) {
+                    if (Route::has($hijo['ruta']) && request()->routeIs($hijo['ruta'])) {
+                    $menuAbierto = true;
+                    break;
+                    }
+                    }
+                    } else {
+                    $menuAbierto = isset($item['ruta']) && Route::has($item['ruta']) && request()->routeIs($item['ruta']);
+                    }
+                    @endphp
+
+                    <div x-data="{ open: {{ $menuAbierto ? 'true' : 'false' }} }" class="w-full">
+                        @if($tieneHijos)
+                        <button @click="open = !open" class="w-full flex items-center px-4 py-3 rounded-2xl transition-all duration-200 group text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50">
+                            <i class="{{ $item['icono'] }} w-5 text-gray-400 group-hover:text-primary transition-transform group-hover:scale-110"></i>
+                            <span class="ml-3 flex-1 text-left text-sm font-medium">{{ $item['nombre'] }}</span>
+                            <i class="fas fa-chevron-down text-[10px] text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
+                        </button>
+
+                        <div x-show="open" x-collapse class="flex flex-col pl-4 mt-1 space-y-1 border-l border-gray-200 dark:border-gray-700 ml-6">
+                            @foreach ($item['hijos'] as $hijo)
+                            @php
+                            $hijoActivo = Route::has($hijo['ruta']) && request()->routeIs($hijo['ruta']);
+                            @endphp
+                            <a href="{{ Route::has($hijo['ruta']) ? route($hijo['ruta']) : '#' }}"
+                                class="px-4 py-2 text-xs font-medium transition-all duration-200 rounded-xl {{ $hijoActivo ? 'text-primary dark:text-white font-bold bg-primary/10' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white' }}">
+                                — {{ $hijo['nombre'] }}
+                            </a>
+                            @endforeach
+                        </div>
+                        @else
+                        <a href="{{ (isset($item['ruta']) && Route::has($item['ruta'])) ? route($item['ruta']) : '#' }}"
+                            class="w-full flex items-center px-4 py-3 rounded-2xl transition-all duration-200 group {{ $menuAbierto ? 'bg-primary text-white font-bold shadow-lg shadow-primary/20' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
+                            <i class="{{ $item['icono'] }} w-5 {{ $menuAbierto ? 'text-white' : 'text-gray-400 group-hover:text-primary' }} transition-transform group-hover:scale-110"></i>
+                            <span class="ml-3 text-sm font-medium">{{ $item['nombre'] }}</span>
+                        </a>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+                @endif
             </nav>
 
-            <div class="p-4 border-t border-gray-100 dark:border-gray-700 relative group">
+            <div class="p-4 border-t border-gray-100 dark:border-gray-700 relative group flex-shrink-0">
                 <div class="absolute bottom-20 left-4 right-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl invisible opacity-0 scale-95 group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 z-50 p-2 space-y-1">
-                    <a href="{{ Route::has('configuracion') ? route('configuracion') : '#' }}"
-                        class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        </svg>
-                        Configuración
-                    </a>
+                    <button onclick="document.documentElement.classList.toggle('dark')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
+                        <i class="fas fa-moon text-gray-400 w-4"></i> Modo Oscuro
+                    </button>
                     <hr class="border-gray-100 dark:border-gray-700 my-1">
-                    <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
 
-                    <a href="{{ route('auth.logout') }}"
-                        class="TU_CLASE_DE_DISEÑO_AQUÍ"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Cerrar Sesión</span>
+                    <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">@csrf</form>
+                    <a href="{{ route('auth.logout') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors font-medium" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt w-4"></i> <span>Cerrar Sesión</span>
                     </a>
                 </div>
 
                 <div class="flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-100 dark:border-gray-600 cursor-pointer group-hover:border-primary transition-all">
-                    <img src="https://ui-avatars.com/api/?name=Ivan+Lopez&background=6366f1&color=fff" class="h-9 w-9 rounded-xl object-cover" alt="Avatar">
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nombre ?? Auth::user()->name ?? 'Usuario') }}&background=6366f1&color=fff" class="h-9 w-9 rounded-xl object-cover" alt="Avatar">
                     <div class="flex-1 min-w-0">
-                        <p class="text-xs font-bold text-gray-800 dark:text-white truncate">{{ Auth::user()->email }}</p>
-                        <p class="text-[10px] text-gray-500 truncate">Administrador</p>
+                        <p class="text-xs font-bold text-gray-800 dark:text-white truncate">{{ Auth::user()->email}}</p>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold truncate">{{ Auth::user()->rol->nombre }}</p>
                     </div>
                     <svg class="w-4 h-4 text-gray-400 group-hover:text-primary transition-transform group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
@@ -144,26 +226,32 @@
             </div>
         </aside>
 
-
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
-
             <header class="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 lg:hidden flex-shrink-0">
                 <button onclick="toggleSidebar()" class="p-2 -ml-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-
-                <span class="text-md font-black text-gray-800 dark:text-white tracking-tight italic">SISTEMA</span>
-
+                <span class="text-md font-black text-gray-800 dark:text-white tracking-tight">QUASYS</span>
                 <button onclick="document.documentElement.classList.toggle('dark')" class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
+                    <i class="fas fa-moon text-md"></i>
                 </button>
             </header>
 
-            @yield('content')
+            <div class="flex-1 overflow-y-auto p-6">
+                @if(View::hasSection('content'))
+                @yield('content')
+                @else
+                <div class="h-full bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 border-dashed flex flex-col items-center justify-center text-gray-400 p-8">
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl mb-4">
+                        <i class="fas fa-folder-open text-4xl text-primary"></i>
+                    </div>
+                    <p class="font-bold text-gray-700 dark:text-gray-200 tracking-tight text-lg mb-1">Bienvenido a Quasys</p>
+                    <p class="text-sm text-gray-400 dark:text-gray-500 text-center max-w-xs">Selecciona una opción del panel izquierdo para cargar tus herramientas.</p>
+                </div>
+                @endif
+            </div>
         </main>
     </div>
 
@@ -172,12 +260,9 @@
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
 
-            // Alternar visibilidad de la barra lateral
             if (sidebar.classList.contains('-translate-x-full')) {
                 sidebar.classList.remove('-translate-x-full');
                 sidebar.classList.add('translate-x-0');
-
-                // Mostrar overlay con animación
                 overlay.classList.remove('hidden');
                 setTimeout(() => {
                     overlay.classList.remove('opacity-0');
@@ -186,8 +271,6 @@
             } else {
                 sidebar.classList.remove('translate-x-0');
                 sidebar.classList.add('-translate-x-full');
-
-                // Ocultar overlay con animación
                 overlay.classList.remove('opacity-100');
                 overlay.classList.add('opacity-0');
                 setTimeout(() => {
@@ -196,7 +279,6 @@
             }
         }
     </script>
-
 </body>
 
 </html>

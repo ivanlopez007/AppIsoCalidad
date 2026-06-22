@@ -39,7 +39,7 @@ class AdminController extends Controller
         $localidades = Localidad::all();
         $roles = Rol::all();
         $areas = Area::all();
-        $usuarios = Usuario::with('infoUsuario')->get();
+        $usuarios = Usuario::with('infoUsuario')->where('rol_id', '!=', 3)->get(); // Excluyo a los colaboradores
 
         // 1. Obtenemos los usuarios que pertenezcan a los roles de Gerencia o Calidad
         // Nota: Ajusta 'Gerencia' y 'Calidad' según los nombres exactos que tengas en tu tabla de roles.
@@ -49,5 +49,45 @@ class AdminController extends Controller
 
         // 2. Enviamos TODAS las variables a la vista, incluyendo ahora a los $supervisores
         return view('crear_usuario', compact('roles', 'areas', 'localidades', 'supervisores', 'usuarios'));
+    }
+
+
+    public function crearUsuario(Request $request){
+
+    // no me funciona el return redirect()->route('admin.usuarios')->with('success', 'Usuario creado exitosamente.'); --- IGNORE ---    
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellido_paterno' => 'required|string|max:255',
+            'apellido_materno' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:usuarios,email',
+            'password' => 'required|string|min:6|confirmed',
+            'rol_id' => 'required|exists:rols,id',
+            'area_id' => 'required|exists:areas,id',
+            'localidad_id' => 'required|exists:localidads,id',
+            'jefe_inmediato_id' => 'nullable|exists:usuarios,id',
+        ]);
+
+        $usuario = Usuario::create([
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+            'rol_id' => $validatedData['rol_id'],
+            'area_id' => $validatedData['area_id'],
+            'localidad_id' => $validatedData['localidad_id'],
+            'jefe_inmediato_id' => $validatedData['jefe_inmediato_id'] ?? null,
+        ]);
+
+        $infoUsuario = $usuario->infoUsuario()->create([
+            'nombre' => $validatedData['nombre'],
+            'apellido_paterno' => $validatedData['apellido_paterno'],
+            'apellido_materno' => $validatedData['apellido_materno'] ?? null,
+        ]);
+
+        $usuario->save();
+        $infoUsuario->save();
+
+        return redirect()->route('admin.usuarios')->with('success', 'Usuario creado exitosamente.');
+        
+
     }
 }

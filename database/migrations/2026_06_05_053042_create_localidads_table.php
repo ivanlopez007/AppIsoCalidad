@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('localidad', function (Blueprint $table) {
+        Schema::create('localidads', function (Blueprint $table) {
             $table->id();
             $table->string('localidad'); // Nombre de la sucursal (ej. Planta 1, Corporativo)
             $table->timestamps();
