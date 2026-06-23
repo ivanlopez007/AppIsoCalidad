@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tipo_solicituds', function (Blueprint $table) {
             $table->id();
+            $table->string('tipo_solicitud'); //ejemplo: nuevo, modificación, eliminación, etc.
             $table->timestamps();
         });
     }

@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('periodo_retencions', function (Blueprint $table) {
             $table->id();
+            $table->integer('tiempo'); //ejemplo 1, 2, 3, 4, 5
+            $table->string('unidad_tiempo'); //ejemplo: dias, meses, años
             $table->timestamps();
         });
     }

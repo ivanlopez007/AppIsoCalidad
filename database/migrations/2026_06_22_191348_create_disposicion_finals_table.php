@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('disposicion_finals', function (Blueprint $table) {
             $table->id();
+            $table->string('disposicion_final'); //ejemplo: Retención, Destrucción, Archivo, etc.
             $table->timestamps();
         });
     }

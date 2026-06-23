@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('sub_nivels', function (Blueprint $table) {
             $table->id();
+            $table->integer('sub_nivel');
+            $table->string('descripcion')->nullable();
             $table->timestamps();
         });
     }

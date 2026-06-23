@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('lugar_retencions', function (Blueprint $table) {
             $table->id();
+            $table->string('lugar_retencion'); //ejemplo : Electrico, Fisico.
             $table->timestamps();
         });
     }
