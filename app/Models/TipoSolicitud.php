@@ -10,6 +10,7 @@ class TipoSolicitud extends Model
     use HasFactory;   
     protected $table = 'tipo_solicituds';
 
+    protected $fillable = ['nombre', 'descripcion'];
 
     public function tipoSolicitud()
     {

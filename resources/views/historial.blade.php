@@ -16,6 +16,14 @@
         <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
             <div class="w-full sm:w-48">
                 <select class="w-full px-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl focus:outline-none focus:border-primary dark:text-white font-semibold transition-colors shadow-sm">
+                    <option value="">Localidad</option>
+                    <option value="it">Saltillo</option>
+                    <option value="rh">Ramos Arizpe</option>
+                    <option value="calidad">Monterrey</option>
+                </select>
+            </div>
+            <div class="w-full sm:w-48">
+                <select class="w-full px-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl focus:outline-none focus:border-primary dark:text-white font-semibold transition-colors shadow-sm">
                     <option value="">Todas las Áreas</option>
                     <option value="it">Sistemas / IT</option>
                     <option value="rh">Recursos Humanos</option>

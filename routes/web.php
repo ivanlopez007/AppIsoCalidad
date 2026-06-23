@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 
 //'auth'
-Route::middleware([],)->controller(AuthController::class)->prefix('auth')->group(function (){
+Route::middleware([],)->controller(AuthController::class)->prefix('auth')->group(function () {
 
     // Route::get('/', 'dashboard')->name('admin.dashboard'),
     Route::get('login', 'showLogin')->name('auth.login');
@@ -28,35 +28,37 @@ Route::middleware([],)->controller(AuthController::class)->prefix('auth')->group
     Route::post('logout', 'logout')->name('auth.logout');
 
     Route::get('/', 'configuracion')->name('admin.configuracion');
-        
+
     // Route::resource('/documento', )->name('document')
-    
+
 });
 
-Route::middleware([])->controller(AdminController::class)->prefix('admin')->group(function(){
+Route::middleware([])->controller(AdminController::class)->prefix('admin')->group(function () {
 
     Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
-    Route::get('/usuarios', 'getUsuarios')->name('admin.usuarios');
-    
 
+
+    //Rutas de usuarios
+    Route::get('/aprobacion', 'aprobacion')->name('admin.aprobacion');
+    Route::get('/usuarios', 'getUsuarios')->name('admin.usuarios');
     Route::get('crear-usuario', 'showCrearUsuario')->name('admin.crear_usuario');
     Route::post('crear-usuario', 'crearUsuario')->name('admin.crear_usuario.post');
+    
 
 
 
     Route::get('/solicitar-cambio', 'solicitarCambio')->name('admin.solicitar_cambio');
-    Route::get('/aprobacion', 'aprobacion')->name('admin.aprobacion');
-    Route::get('historial', 'historial')->name('admin.historial');
-    Route::get('formato', 'formato')->name('admin.formato');
+    Route::get('/historial', 'historial')->name('admin.historial');
+    Route::get('/formato', 'formato')->name('admin.formato');
+
+
+
 });
 
 
-Route::middleware([])->controller(CalidadController::class)->prefix('calidad')->group(function(){
+Route::middleware([])->controller(CalidadController::class)->prefix('calidad')->group(function () {
 
     Route::get('/usuarios', 'getUsuarios')->name('calidad.usuarios');
-
-
-
 });
 
 
@@ -70,18 +72,3 @@ Route::get('/probar-correo', function () {
 
     return '¡Notificación enviada a Mailtrap!';
 });
-
-
-
-Route::get('/dashboard', function(){
-    return view('layout/layout');
-})->name("layout");
-
-
-Route::get('/usuario', function(){
-    return view('usuarios');
-})->name("usuarios");
-
-Route::get('/configuracion', function(){
-    return view('configuracion');
-})->name("configuracion");

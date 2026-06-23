@@ -13,10 +13,6 @@ return new class extends Migration
     {
         Schema::create('cambio_documentos', function (Blueprint $table) {
             $table->id();
-
-
-
-
             $table->string('nombre_documento');
             $table->foreignId('usuario_id')->constrained('usuarios');
             $table->foreignId('nivel_id')->constrained('nivels');
