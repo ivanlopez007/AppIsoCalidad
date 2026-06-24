@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full {{ Auth::user()->preferencias?->tema === 'dark' ? 'dark' : '' }}">
 
 <head>
     <meta charset="UTF-8">
@@ -69,7 +69,7 @@
     'nombre' => 'Training Tracker',
     'icono' => 'fas fa-graduation-cap',
     'ruta' => 'training.tracker',
-    'hijos' => [] // Enlace directo sin submenú
+    'hijos' => []
     ]
     ];
     } elseif ($rol == 'calidad') {
@@ -155,7 +155,6 @@
                     @php
                     $tieneHijos = !empty($item['hijos']);
 
-                    // Auto-desplegar submenú si el usuario está dentro de una de las rutas hijas
                     $menuAbierto = false;
                     if ($tieneHijos) {
                     foreach ($item['hijos'] as $hijo) {
@@ -204,13 +203,19 @@
             <div class="p-4 border-t border-gray-100 dark:border-gray-700 relative group flex-shrink-0">
                 <div class="absolute bottom-20 left-4 right-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl invisible opacity-0 scale-95 group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 z-50 p-2 space-y-1">
 
-                    <a href="{{ route('auth.logout') }}" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium"" onclick=" event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <a href="{{ route('admin.crear_usuario') }}" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
                         <i class="fas fa-user-alt w-4"></i> <span>Usuarios</span>
                     </a>
+
                     <hr class="border-gray-100 dark:border-gray-700 my-1">
-                    <button onclick="document.documentElement.classList.toggle('dark')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
-                        <i class="fas fa-moon text-gray-400 w-4"></i> Modo Oscuro
+
+                    <button id="theme-toggle-desktop" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
+                        <i class="fas fa-moon text-gray-400 w-4 dark:hidden"></i>
+                        <i class="fas fa-sun text-gray-400 w-4 hidden dark:block"></i>
+                        <span class="dark:hidden">Modo Oscuro</span>
+                        <span class="hidden dark:block">Modo Claro</span>
                     </button>
+
                     <hr class="border-gray-100 dark:border-gray-700 my-1">
 
                     <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">@csrf</form>
@@ -241,8 +246,10 @@
                     </svg>
                 </button>
                 <span class="text-md font-black text-gray-800 dark:text-white tracking-tight">QUASYS</span>
-                <button onclick="document.documentElement.classList.toggle('dark')" class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300">
-                    <i class="fas fa-moon text-md"></i>
+
+                <button id="theme-toggle-mobile" class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300">
+                    <i class="fas fa-moon text-md dark:hidden"></i>
+                    <i class="fas fa-sun text-md hidden dark:block"></i>
                 </button>
             </header>
 
@@ -285,6 +292,40 @@
                 }, 300);
             }
         }
+
+        function alternarModoOscuro() {
+            const esModoOscuro = document.documentElement.classList.toggle('dark');
+            const temaSeleccionado = esModoOscuro ? 'dark' : 'light';
+
+            fetch('/preferencias/tema', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        tema: temaSeleccionado
+                    })
+                })
+                .then(async response => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        console.error('Error del servidor:', data);
+                        throw new Error(data.message || 'Error desconocido');
+                    }
+                    console.log('Sincronizado con éxito:', data.message);
+                })
+                .catch(error => {
+                    console.error('No se pudo guardar la preferencia:', error);
+                });
+        }
+
+        const botonEscritorio = document.getElementById('theme-toggle-desktop');
+        const botonMovil = document.getElementById('theme-toggle-mobile');
+
+        if (botonEscritorio) botonEscritorio.addEventListener('click', alternarModoOscuro);
+        if (botonMovil) botonMovil.addEventListener('click', alternarModoOscuro);
     </script>
 </body>
 

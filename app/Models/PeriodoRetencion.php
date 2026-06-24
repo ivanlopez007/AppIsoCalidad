@@ -9,6 +9,13 @@ class PeriodoRetencion extends Model
 {
     use HasFactory;
     protected $table = 'periodo_retencions';
+    protected $fillable = ['periodo', 'tiempo'];
+    
+
+    public function cambioDocumentos()
+    {
+        return $this->hasMany(CambioDocumento::class, 'periodo_retencion_id');
+    }
 
 
 }

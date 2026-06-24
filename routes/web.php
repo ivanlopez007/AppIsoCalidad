@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalidadController;
+use App\Http\Controllers\PreferenciaUsuarioController;
 use App\Notifications\CorreoPruebaNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,11 @@ Route::get('/', function () {
 })->name('index');
 
 
+Route::get('/dashboard', function () {
+    return view('layout.layout');
+})->middleware([])->name('dashboard');
+
+
 //'auth'
 Route::middleware([],)->controller(AuthController::class)->prefix('auth')->group(function () {
 
@@ -30,6 +36,13 @@ Route::middleware([],)->controller(AuthController::class)->prefix('auth')->group
     Route::get('/', 'configuracion')->name('admin.configuracion');
 
     // Route::resource('/documento', )->name('document')
+
+});
+
+//'auth'
+Route::middleware([],)->controller(PreferenciaUsuarioController::class)->group(function () {
+
+    Route::post('/preferencias/tema', 'updateTema')->name('preferencias.updateTema');
 
 });
 

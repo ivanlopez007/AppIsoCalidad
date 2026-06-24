@@ -35,6 +35,16 @@ class Usuario extends Authenticatable
         'remember_token',
     ];
 
+    protected static function booted()
+    {
+        static::created(function($usuario){
+            $usuario->preferencias()->create([
+                'tema' => 'light', // Por defecto, el tema es 'light'
+                'idioma' => 'es',
+            ]);
+        });
+    }
+
     /**
      * Relación: Un usuario pertenece a un Rol
      */
@@ -78,5 +88,18 @@ class Usuario extends Authenticatable
     public function infoUsuario()
     {
         return $this->hasOne(InfoUsuario::class, 'usuario_id');
+    }
+
+    public function preferencias()
+    {
+        return $this->hasOne(PreferenciaUsuario::class, 'usuario_id');
+    }
+    public function cambiosDocumento()
+    {
+        return $this->hasMany(CambioDocumento::class, 'usuario_id');
+    }
+    public function cambiosDocumentoAprobados()
+    {
+        return $this->hasMany(CambioDocumento::class, 'aprobar_id');
     }
 }

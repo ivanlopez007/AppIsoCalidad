@@ -23,4 +23,8 @@ class Area extends Model
     {
         return $this->hasOne(Usuario::class);
     }
+    public function cambioDocumentos()
+    {
+        return $this->hasMany(CambioDocumento::class, 'area_id');
+    }
 }

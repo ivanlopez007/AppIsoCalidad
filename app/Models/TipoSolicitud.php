@@ -12,8 +12,10 @@ class TipoSolicitud extends Model
 
     protected $fillable = ['nombre', 'descripcion'];
 
-    public function tipoSolicitud()
+
+    public function cambioDocumentos()
     {
-        return $this->belongsTo(DisposicionFinal::class);
+        return $this->hasMany(CambioDocumento::class, 'tipo_solicitud_id');
     }
+
 }

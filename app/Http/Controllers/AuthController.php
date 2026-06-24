@@ -37,7 +37,16 @@ class AuthController extends Controller
             // Regenerar la sesión por seguridad (evita fijación de sesiones)
             $request->session()->regenerate();
 
-            // Redirecciona a la ruta que intentaba entrar o al dashboard por defecto
+            // // redirecciona dependiendo del rol del usuario
+            // $user = Auth::user();
+            // if ($user->rol->nombre == 'admin') {
+            //     return redirect()->intended('dash');
+            // } elseif ($user->rol->nombre == 'calidad') {
+            //     return redirect()->intended('calidad/dashboard');
+            // } else {
+            //     return redirect()->intended('dashboard');
+            // }
+            // // Redirecciona a la ruta que intentaba entrar o al dashboard por defecto
             return redirect()->intended('dashboard');
         }
 

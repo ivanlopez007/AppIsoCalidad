@@ -10,4 +10,17 @@ class Nivel extends Model
     use HasFactory;
     protected $fillable = ['nombre', 'descripcion'];
     protected $table = 'nivels';
+
+    public function subNiveles()
+    {
+        return $this->hasMany(SubNivel::class, 'nivel_id');
+    }
+    public function documentos()
+    {
+        return $this->hasManyThrough(Documento::class, SubNivel::class, 'nivel_id', 'sub_nivel_id');
+    }
+    public function cambioDocumentos()
+    {
+        return $this->hasMany(CambioDocumento::class, 'nivel_id');
+    }
 }

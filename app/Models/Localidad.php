@@ -24,4 +24,9 @@ class Localidad extends Model
     {
         return $this->hasMany(Usuario::class, 'localidad_id');
     }
+
+    public function cambioDocumentos()
+    {
+        return $this->hasMany(CambioDocumento::class, 'localidad_id');
+    }
 }

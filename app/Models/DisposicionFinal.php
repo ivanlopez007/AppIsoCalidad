@@ -9,10 +9,10 @@ class DisposicionFinal extends Model
 {
     use HasFactory;
     protected $table = 'disposicion_finals';
-    protected $fillable = ['nombre', 'descripcion'];
+    protected $fillable = ['disposicion_final'];
 
-    public function tipoSolicitud()
+    public function cambioDocumento()
     {
-        return $this->hasMany(TipoSolicitud::class);
+        return $this->hasMany(CambioDocumento::class, 'disposicion_final_id');
     }
 }
