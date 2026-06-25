@@ -9,7 +9,7 @@ class SubNivel extends Model
 {
     use HasFactory;
     protected $table = 'sub_nivels';
-    protected $fillable = ['nombre', 'nivel_id'];
+    protected $fillable = ['descripcion'];
 
 
     public function nivel()

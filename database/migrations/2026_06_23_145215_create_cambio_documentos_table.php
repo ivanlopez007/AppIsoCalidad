@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('cambio_documentos', function (Blueprint $table) {
             $table->id();
+            $table->string('folio')->unique();
             $table->string('nombre_documento');
             $table->foreignId('usuario_id')->constrained('usuarios');
             $table->foreignId('nivel_id')->constrained('nivels');
             $table->foreignId('sub_nivel_id')->constrained('sub_nivels');
             $table->string('url_documento');
             $table->integer('version');
+            $table->string('numero_iso');
             $table->foreignId('aprobar_id')->constrained('usuarios');
             $table->foreignId('localidad_id')->constrained('localidads');
             $table->foreignId('area_id')->constrained('areas');

@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\DisposicionFinal;
 use App\Models\Localidad;
+use App\Models\LugarRetencion;
+use App\Models\Nivel;
+use App\Models\PeriodoRetencion;
 use App\Models\Rol;
+use App\Models\SubNivel;
+use App\Models\TipoSolicitud;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -24,7 +31,7 @@ class AdminController extends Controller
         $rolesLista = Rol::all();
 
         // ✨ CORRECCIÓN: Quitamos el '.index' para que busque directamente 'usuarios.blade.php'
-        return view('components.usuarios', compact('usuarios', 'totalRoles', 'totalAreas', 'rolesLista'));
+        return view('components.usuario.usuarios', compact('usuarios', 'totalRoles', 'totalAreas', 'rolesLista'));
     }
 
 
@@ -38,19 +45,46 @@ class AdminController extends Controller
 
 
         // 2. Enviamos TODAS las variables a la vista, incluyendo ahora a los $supervisores
-        return view('components.crear_usuario', compact('roles', 'areas', 'localidades', 'usuarios'));
+        return view('components.usuario.crear_usuario', compact('roles', 'areas', 'localidades', 'usuarios'));
     }
+
+    public function eliminarUsuario(int $id)
+    {
+
+        if (Auth::user()->id === $id) {
+            return redirect()->route('admin.usuarios')->with('error', 'No puedes eliminar tu propio usuario.');
+        }
+        //solo quiero eliminar al ususario
+        $usuario = Usuario::findOrFail($id);
+        $usuario->delete();
+
+        return redirect()->route('admin.usuarios')->with('success', 'Usuario eliminado exitosamente.');
+    }
+
+
+
 
     public function showEditarUsuario(int $id)
     {
-        $usuario = Usuario::with('infoUsuario')->findOrFail($id);
+        // Carga el usuario con toda su información estructural y sus datos personales en una sola consulta
+        $usuario = Usuario::with(['infoUsuario', 'rol', 'area', 'localidad', 'jefeInmediato.infoUsuario'])->findOrFail($id);
+
+        // Catálogos para llenar los elementos <select> del formulario
         $localidades = Localidad::all();
         $roles = Rol::all();
         $areas = Area::all();
-        $usuarios = Usuario::with('infoUsuario')->where('rol_id', '!=', 3)->get(); // Excluyo a los colaboradores
 
-        return view('components.editar_usuario', compact('usuario', 'roles', 'areas', 'localidades', 'usuarios'));
+        // Obtenemos los posibles jefes inmediatos cargando también su información personal
+        // Nota: Si el rol_id de colaborador es el 3, los excluimos correctamente.
+        $supervisores = Usuario::with('infoUsuario')
+            ->where('rol_id', '!=', 3)
+            ->where('id', '!=', $id) // Excluimos al mismo usuario para que no pueda ser su propio jefe
+            ->get();
+
+        return view('components.usuario.editar_usuario', compact('usuario', 'roles', 'areas', 'localidades', 'supervisores'));
     }
+
+
     public function updateUsuario(Request $request, int $id)
     {
         $usuario = Usuario::findOrFail($id);
@@ -156,28 +190,55 @@ class AdminController extends Controller
 
 
 
-
-
-
-
-
-
-
-
     public function solicitarCambio()
     {
-        return view('solicitar_cambio');
+        // Cargamos los catálogos normales
+        $tiposSolicitud = TipoSolicitud::all();
+        $niveles = Nivel::all();
+        $subniveles = SubNivel::all();
+        $lugaresRetencion = LugarRetencion::all();
+        $periodosRetencion = PeriodoRetencion::all();
+        $disposicionesFinales = DisposicionFinal::all();
+        $colaboradores = Usuario::with('infoUsuario')->get();
+        $areas = Area::all();
+        $localidades = Localidad::all();
+
+        // Obtener el usuario logueado con todas sus relaciones necesarias
+        // Nota: Si 'localidad' y 'area' están dentro de 'infoUsuario', cámbialo a: 'infoUsuario.localidad', 'infoUsuario.area'
+        $usuarioLogueado = Usuario::with(['jefeInmediato.infoUsuario', 'infoUsuario', 'localidad', 'area'])->find(Auth::id());
+        $jefeInmediato = $usuarioLogueado->jefeInmediato;
+
+        // Folio tentativo
+        $conteo = 88;
+        $proximoFolio = 'SOL-' . date('Y') . '-' . str_pad($conteo, 3, '0', STR_PAD_LEFT);
+        $ultimosDocumentos = [];
+
+        return view('components.documento.solicitar_cambio', compact(
+            'tiposSolicitud',
+            'niveles',
+            'subniveles',
+            'lugaresRetencion',
+            'periodosRetencion',
+            'disposicionesFinales',
+            'colaboradores',
+            'jefeInmediato',
+            'usuarioLogueado', // 💡 Pasamos el usuario completo para identificar su área/localidad
+            'areas',           // 💡 Aseguramos el envío de las áreas
+            'localidades',     // 💡 Aseguramos el envío de las localidades
+            'proximoFolio',
+            'ultimosDocumentos'
+        ));
     }
     public function aprobacion()
     {
-        return view('aprobacion');
+        return view('components.documento.aprobacion');
     }
     public function historial()
     {
-        return view('historial');
+        return view('components.documento.historial');
     }
     public function formato()
     {
-        return view('formato');
+        return view('components.documento.formato');
     }
 }

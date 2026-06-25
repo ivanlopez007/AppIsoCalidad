@@ -9,7 +9,7 @@ class LugarRetencion extends Model
 {
     use HasFactory;
     protected $table = 'lugar_retencions';
-    protected $fillable = ['nombre', 'descripcion'];
+    protected $fillable = ['lugar_retencion',];
 
     public function cambioDocumentos()
     {

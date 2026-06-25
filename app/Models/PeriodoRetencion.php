@@ -9,7 +9,7 @@ class PeriodoRetencion extends Model
 {
     use HasFactory;
     protected $table = 'periodo_retencions';
-    protected $fillable = ['periodo', 'tiempo'];
+    protected $fillable = ['tiempo', 'periodo_tiempo'];
     
 
     public function cambioDocumentos()

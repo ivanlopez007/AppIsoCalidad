@@ -7,6 +7,13 @@ use App\Models\Rol;
 use App\Models\Area;
 use App\Models\Localidad;
 use App\Models\InfoUsuario;
+// Nuevos Modelos Importados
+use App\Models\Nivel;
+use App\Models\Subnivel;
+use App\Models\DisposicionFinal;
+use App\Models\LugarRetencion;
+use App\Models\PeriodoRetencion;
+use App\Models\TipoSolicitud;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,7 +23,65 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Crear catálogos base independientes (RolFactory creará: admin, calidad, colaborador)
+        // ==========================================
+        // 1. NUEVOS CATÁLOGOS BASE (MÓDULO DOCUMENTAL)
+        // ==========================================
+
+        // Estructura de Niveles y Subniveles
+        $nivelesDatos = [
+            ['nivel' => 1, 'descripcion' => 'Estratégico (Manuales y Políticas)'],
+            ['nivel' => 2, 'descripcion' => 'Táctico (Procedimientos Organizacionales)'],
+            ['nivel' => 3, 'descripcion' => 'Operativo (Instructivos de Trabajo y Guías)'],
+        ];
+
+        foreach ($nivelesDatos as $nd) {
+            $nivel = Nivel::create($nd);
+
+            // Creamos subniveles asociados a este nivel
+            Subnivel::create([
+                'nivel_id' => $nivel->id,
+                'descripcion' => 'General - ' . $nivel->descripcion
+            ]);
+            Subnivel::create([
+                'nivel_id' => $nivel->id,
+                'descripcion' => 'Específico - ' . $nivel->descripcion
+            ]);
+        }
+
+        // Catálogo: Disposición Final
+        $disposiciones = ['Destrucción física', 'Digitalización y archivo muerto', 'Reciclaje', 'Permanente'];
+        foreach ($disposiciones as $disp) {
+            DisposicionFinal::create(['disposicion_final' => $disp]);
+        }
+
+        // Catálogo: Lugar de Retención
+        $lugares = ['Servidor Local (TI)', 'Gabinete de Calidad', 'Archivo Central', 'Nube (SharePoint/Drive)'];
+        foreach ($lugares as $lug) {
+            LugarRetencion::create(['lugar_retencion' => $lug]);
+        }
+
+        // Catálogo: Periodo de Retención
+        $periodos = [
+            ['tiempo' => 1, 'unidad_tiempo' => 'Año'],
+            ['tiempo' => 3, 'unidad_tiempo' => 'Años'],
+            ['tiempo' => 5, 'unidad_tiempo' => 'Años'],
+            ['tiempo' => 10, 'unidad_tiempo' => 'Años'],
+        ];
+        foreach ($periodos as $per) {
+            PeriodoRetencion::create($per);
+        }
+
+        // Catálogo: Tipo de Solicitud (Fijo tal cual lo solicitaste)
+        $tiposSolicitud = ['Nuevo', 'Eliminar', 'Actualizar'];
+        foreach ($tiposSolicitud as $tipo) {
+            TipoSolicitud::create(['tipo_solicitud' => $tipo]);
+        }
+
+        // ==========================================
+        // 2. CATÁLOGOS PREEXISTENTES Y USUARIOS
+        // ==========================================
+
+        // Crear catálogos base independientes (RolFactory creará: admin, calidad, colaborador)
         $roles = Rol::factory()->count(3)->create();
         $localidades = Localidad::factory()->count(3)->create();
         $areas = Area::factory()->count(5)->create();
@@ -26,10 +91,10 @@ class DatabaseSeeder extends Seeder
         $idCalidad = $roles->where('nombre', 'calidad')->first()->id ?? $roles[1]->id;
         $idColaborador = $roles->where('nombre', 'colaborador')->first()->id ?? $roles[2]->id;
 
-        // 2. Crear al Director General (Admin) y su información
+        // Crear al Director General (Admin) y su información
         $director = Usuario::factory()->create([
             'email' => 'director@empresa.com',
-            'rol_id' => $idAdmin, // Asignación explícita de Administrador
+            'rol_id' => $idAdmin,
             'localidad_id' => $localidades->first()->id,
             'area_id' => $areas->first()->id,
             'jefe_inmediato_id' => null,
@@ -39,9 +104,9 @@ class DatabaseSeeder extends Seeder
             'usuario_id' => $director->id,
         ]);
 
-        // 3. Crear Gerentes (Calidad - Reportan directamente al Director)
+        // Crear Gerentes (Calidad - Reportan directamente al Director)
         $gerentes = Usuario::factory()->count(2)->create([
-            'rol_id' => $idCalidad, // Asignación explícita de Calidad
+            'rol_id' => $idCalidad,
             'localidad_id' => fn() => $localidades->random()->id,
             'area_id' => fn() => $areas->random()->id,
             'jefe_inmediato_id' => $director->id,
@@ -53,9 +118,9 @@ class DatabaseSeeder extends Seeder
             ]);
         });
 
-        // 4. Crear Empleados del staff (Colaboradores) y su información
+        // Crear Empleados del staff (Colaboradores) y su información
         $empleados = Usuario::factory()->count(15)->create([
-            'rol_id' => $idColaborador, // Ahora sí, todos los del staff nacen como 'colaborador'
+            'rol_id' => $idColaborador,
             'localidad_id' => fn() => $localidades->random()->id,
             'area_id' => fn() => $areas->random()->id,
             'jefe_inmediato_id' => fn() => $gerentes->random()->id,

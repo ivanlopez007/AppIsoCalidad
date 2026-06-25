@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('layout.layout');
-})->middleware([])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 //funciona
 
 
@@ -36,9 +36,6 @@ Route::middleware([],)->controller(AuthController::class)->prefix('auth')->group
     Route::post('logout', 'logout')->name('auth.logout');
     // Route::resource('/documento', )->name('document')
 });
-
-
-
 
 
 //'auth'
@@ -56,34 +53,28 @@ Route::middleware([],)->controller(PreferenciaUsuarioController::class)->group(f
 
 
 Route::middleware([])->controller(AdminController::class)->prefix('admin')->group(function () {
-
     Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
 
-    Route::get('/usuarios',         'showUsuarios')->name('admin.usuarios');
 
-    
-    
-    
-    
+
+    Route::get('/usuarios',         'showUsuarios')->name('admin.usuarios');
     //Rutas de usuarios
 
+    Route::get('crear-usuario',         'showCrearUsuario')->name('admin.crear_usuario');
+    Route::post('crear-usuario',        'crearUsuario')->name('admin.crear_usuario.post');
 
-    Route::get('/aprobacion',       'aprobacion')->name('admin.aprobacion');
 
-    Route::get('crear-usuario',     'showCrearUsuario')->name('admin.crear_usuario');
-    Route::post('crear-usuario',    'crearUsuario')->name('admin.crear_usuario.post');
+    Route::get('editar-usuario/{id}',   'showEditarUsuario')->name('admin.editar_usuario');
 
-    Route::get('editar-usuario/{id}', 'showEditarUsuario')->name('admin.editar_usuario');
-    Route::post('editar-usuario/{id}', 'updateUsuario')->name('admin.editar_usuario.post');
-
-    Route::get('eliminar-usuario/{id}', 'eliminarUsuario')->name('admin.eliminar_usuario');
-    Route::post('eliminar-usuario/{id}', 'eliminarUsuarioPost')->name('admin.eliminar_usuario.post');
+    Route::put('editar-usuario/{id}',  'updateUsuario')->name('admin.editar_usuario.put');
+    Route::delete('eliminar-usuario/{id}', 'eliminarUsuario')->name('admin.eliminar_usuario.delete');
 
 
 
     Route::get('/solicitar-cambio', 'solicitarCambio')->name('admin.solicitar_cambio');
     Route::get('/historial', 'historial')->name('admin.historial');
     Route::get('/formato', 'formato')->name('admin.formato');
+    Route::get('/aprobacion',       'aprobacion')->name('admin.aprobacion');
 });
 
 

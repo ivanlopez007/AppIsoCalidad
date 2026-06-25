@@ -48,6 +48,7 @@
     $seccionNombre = '';
     $menuConfig = [];
 
+    // Nota: Las rutas temporales se establecen en '#' para evitar errores de compilación de rutas.
     if ($rol == 'admin') {
     $seccionNombre = 'Gerencia';
     $menuConfig = [
@@ -55,20 +56,20 @@
     'nombre' => 'Control de Documentos',
     'icono' => 'fas fa-chart-pie',
     'hijos' => [
-    ['nombre' => 'Solicitud de cambios', 'ruta' => 'solicitudes.cambios'],
-    ['nombre' => 'Aprobación de Solicitud', 'ruta' => 'solicitudes.aprobacion'],
-    ['nombre' => 'Revision de Solicitudes', 'ruta' => 'solicitudes.revision'],
-    ['nombre' => 'Consulta de documentos', 'ruta' => 'documentos.consulta'],
-    ['nombre' => 'Historial de documentos', 'ruta' => 'documentos.historial'],
-    ['nombre' => 'Matriz de documentos', 'ruta' => 'documentos.matriz'],
-    ['nombre' => 'Revisión de documentos', 'ruta' => 'documentos.revision'],
-    ['nombre' => 'Hoja de Tarea Estándar', 'ruta' => 'documentos.hoja_tarea']
+    ['nombre' => 'Solicitud de cambios', 'ruta' => 'admin.solicitar_cambio'],
+    ['nombre' => 'Aprobación de Solicitud', 'ruta' => 'admin.aprobacion'],
+    ['nombre' => 'Revision de Solicitudes', 'ruta' => '#'],
+    ['nombre' => 'Consulta de documentos', 'ruta' => '#'],
+    ['nombre' => 'Historial de documentos', 'ruta' => 'admin.historial'],
+    ['nombre' => 'Matriz de documentos', 'ruta' => 'admin.formato'],
+    ['nombre' => 'Revisión de documentos', 'ruta' => '#'],
+    ['nombre' => 'Hoja de Tarea Estándar', 'ruta' => '#']
     ]
     ],
     [
     'nombre' => 'Training Tracker',
     'icono' => 'fas fa-graduation-cap',
-    'ruta' => 'training.tracker',
+    'ruta' => '#',
     'hijos' => []
     ]
     ];
@@ -79,20 +80,20 @@
     'nombre' => 'Control de Documentos',
     'icono' => 'fas fa-shield-halved',
     'hijos' => [
-    ['nombre' => 'Solicitud de cambios', 'ruta' => 'solicitudes.cambios'],
-    ['nombre' => 'Aprobación de Solicitud', 'ruta' => 'solicitudes.aprobacion'],
-    ['nombre' => 'Revision de Solicitudes', 'ruta' => 'solicitudes.revision'],
-    ['nombre' => 'Consulta de documentos', 'ruta' => 'documentos.consulta'],
-    ['nombre' => 'Historial de documentos', 'ruta' => 'documentos.historial'],
-    ['nombre' => 'Matriz de documentos', 'ruta' => 'documentos.matriz'],
-    ['nombre' => 'Revisión de documentos', 'ruta' => 'documentos.revision'],
-    ['nombre' => 'Hoja de Tarea Estándar', 'ruta' => 'documentos.hoja_tarea']
+    ['nombre' => 'Solicitud de cambios', 'ruta' => '#'],
+    ['nombre' => 'Aprobación de Solicitud', 'ruta' => '#'],
+    ['nombre' => 'Revision de Solicitudes', 'ruta' => '#'],
+    ['nombre' => 'Consulta de documentos', 'ruta' => '#'],
+    ['nombre' => 'Historial de documentos', 'ruta' => '#'],
+    ['nombre' => 'Matriz de documentos', 'ruta' => '#'],
+    ['nombre' => 'Revisión de documentos', 'ruta' => '#'],
+    ['nombre' => 'Hoja de Tarea Estándar', 'ruta' => '#']
     ]
     ],
     [
     'nombre' => 'Training Tracker',
     'icono' => 'fas fa-graduation-cap',
-    'ruta' => 'training.tracker',
+    'ruta' => '#',
     'hijos' => []
     ]
     ];
@@ -103,20 +104,20 @@
     'nombre' => 'Control de Documentos',
     'icono' => 'fas fa-user-tie',
     'hijos' => [
-    ['nombre' => 'Solicitud de cambios', 'ruta' => 'solicitudes.cambios'],
-    ['nombre' => 'Aprobación de solicitudes de nivel superior', 'ruta' => 'solicitudes.nivel_superior'],
-    ['nombre' => 'Aprobación de solicitudes THE', 'ruta' => 'solicitudes.the'],
-    ['nombre' => 'Estatus de Solicitudes', 'ruta' => 'solicitudes.estatus'],
-    ['nombre' => 'Consulta de documentos', 'ruta' => 'documentos.consulta'],
-    ['nombre' => 'Historial de documentos', 'ruta' => 'documentos.historial'],
-    ['nombre' => 'Matriz de documentos', 'ruta' => 'documentos.matriz'],
-    ['nombre' => 'Revisión de documentos', 'ruta' => 'documentos.revision']
+    ['nombre' => 'Solicitud de cambios', 'ruta' => '#'],
+    ['nombre' => 'Aprobación de solicitudes de nivel superior', 'ruta' => '#'],
+    ['nombre' => 'Aprobación de solicitudes THE', 'ruta' => '#'],
+    ['nombre' => 'Estatus de Solicitudes', 'ruta' => '#'],
+    ['nombre' => 'Consulta de documentos', 'ruta' => '#'],
+    ['nombre' => 'Historial de documentos', 'ruta' => '#'],
+    ['nombre' => 'Matriz de documentos', 'ruta' => '#'],
+    ['nombre' => 'Revisión de documentos', 'ruta' => '#']
     ]
     ],
     [
     'nombre' => 'Training Tracker',
     'icono' => 'fas fa-graduation-cap',
-    'ruta' => 'training.tracker',
+    'ruta' => '#',
     'hijos' => []
     ]
     ];
@@ -158,13 +159,13 @@
                     $menuAbierto = false;
                     if ($tieneHijos) {
                     foreach ($item['hijos'] as $hijo) {
-                    if (Route::has($hijo['ruta']) && request()->routeIs($hijo['ruta'])) {
+                    if ($hijo['ruta'] !== '#' && Route::has($hijo['ruta']) && request()->routeIs($hijo['ruta'])) {
                     $menuAbierto = true;
                     break;
                     }
                     }
                     } else {
-                    $menuAbierto = isset($item['ruta']) && Route::has($item['ruta']) && request()->routeIs($item['ruta']);
+                    $menuAbierto = isset($item['ruta']) && $item['ruta'] !== '#' && Route::has($item['ruta']) && request()->routeIs($item['ruta']);
                     }
                     @endphp
 
@@ -179,16 +180,16 @@
                         <div x-show="open" x-collapse class="flex flex-col pl-4 mt-1 space-y-1 border-l border-gray-200 dark:border-gray-700 ml-6">
                             @foreach ($item['hijos'] as $hijo)
                             @php
-                            $hijoActivo = Route::has($hijo['ruta']) && request()->routeIs($hijo['ruta']);
+                            $hijoActivo = $hijo['ruta'] !== '#' && Route::has($hijo['ruta']) && request()->routeIs($hijo['ruta']);
                             @endphp
-                            <a href="{{ Route::has($hijo['ruta']) ? route($hijo['ruta']) : '#' }}"
+                            <a href="{{ ($hijo['ruta'] !== '#' && Route::has($hijo['ruta'])) ? route($hijo['ruta']) : '#' }}"
                                 class="px-4 py-2 text-xs font-medium transition-all duration-200 rounded-xl {{ $hijoActivo ? 'text-primary dark:text-white font-bold bg-primary/10' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white' }}">
                                 — {{ $hijo['nombre'] }}
                             </a>
                             @endforeach
                         </div>
                         @else
-                        <a href="{{ (isset($item['ruta']) && Route::has($item['ruta'])) ? route($item['ruta']) : '#' }}"
+                        <a href="{{ (isset($item['ruta']) && $item['ruta'] !== '#' && Route::has($item['ruta'])) ? route($item['ruta']) : '#' }}"
                             class="w-full flex items-center px-4 py-3 rounded-2xl transition-all duration-200 group {{ $menuAbierto ? 'bg-primary text-white font-bold shadow-lg shadow-primary/20' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
                             <i class="{{ $item['icono'] }} w-5 {{ $menuAbierto ? 'text-white' : 'text-gray-400 group-hover:text-primary' }} transition-transform group-hover:scale-110"></i>
                             <span class="ml-3 text-sm font-medium">{{ $item['nombre'] }}</span>
@@ -205,12 +206,11 @@
 
                     @if ( Auth::user()->rol->nombre === 'admin' || Auth::user()->rol->nombre === 'calidad' )
 
-                    <a href="{{ route('admin.usuarios') }}" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
+                    <a href="{{ Route::has('admin.usuarios') ? route('admin.usuarios') : '#' }}" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
                         <i class="fas fa-user-alt w-4"></i> <span>Usuarios</span>
                     </a>
 
                     @endif
-
 
                     <hr class="border-gray-100 dark:border-gray-700 my-1">
 
@@ -223,8 +223,8 @@
 
                     <hr class="border-gray-100 dark:border-gray-700 my-1">
 
-                    <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">@csrf</form>
-                    <a href="{{ route('auth.logout') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors font-medium" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <form id="logout-form" action="{{ Route::has('auth.logout') ? route('auth.logout') : '#' }}" method="POST" style="display: none;">@csrf</form>
+                    <a href="{{ Route::has('auth.logout') ? route('auth.logout') : '#' }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors font-medium" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fas fa-sign-out-alt w-4"></i> <span>Cerrar Sesión</span>
                     </a>
 

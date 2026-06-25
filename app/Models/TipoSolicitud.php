@@ -10,7 +10,7 @@ class TipoSolicitud extends Model
     use HasFactory;   
     protected $table = 'tipo_solicituds';
 
-    protected $fillable = ['nombre', 'descripcion'];
+    protected $fillable = ['tipo_solicitud'];
 
 
     public function cambioDocumentos()

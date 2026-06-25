@@ -8,12 +8,14 @@ class CambioDocumento extends Model
 {
     protected $table = 'cambio_documentos';
     protected $fillable = [
+        'folio',
         'nombre_documento',
         'usuario_id',
         'nivel_id',
         'sub_nivel_id',
         'url_documento',
         'version',
+        'numero_iso',
         'aprobar_id',
         'localidad_id',
         'area_id',
