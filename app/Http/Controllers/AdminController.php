@@ -11,12 +11,7 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
 
-    public function dashboard()
-    {
-        return view('admin.dashboard');
-    }
-
-    public function getUsuarios()
+    public function showUsuarios()
     {
         // 1. Cargar usuarios con sus relaciones eager loading
         $usuarios = Usuario::with(['rol', 'localidad', 'area', 'jefeInmediato'])->get();
@@ -29,7 +24,7 @@ class AdminController extends Controller
         $rolesLista = Rol::all();
 
         // ✨ CORRECCIÓN: Quitamos el '.index' para que busque directamente 'usuarios.blade.php'
-        return view('usuarios', compact('usuarios', 'totalRoles', 'totalAreas', 'rolesLista'));
+        return view('components.usuarios', compact('usuarios', 'totalRoles', 'totalAreas', 'rolesLista'));
     }
 
 
@@ -41,14 +36,59 @@ class AdminController extends Controller
         $areas = Area::all();
         $usuarios = Usuario::with('infoUsuario')->where('rol_id', '!=', 3)->get(); // Excluyo a los colaboradores
 
-        // 1. Obtenemos los usuarios que pertenezcan a los roles de Gerencia o Calidad
-        // Nota: Ajusta 'Gerencia' y 'Calidad' según los nombres exactos que tengas en tu tabla de roles.
-        $supervisores = Usuario::whereHas('rol', function ($query) {
-            $query->whereIn('nombre', ['Gerencia', 'Calidad']);
-        })->get();
 
         // 2. Enviamos TODAS las variables a la vista, incluyendo ahora a los $supervisores
-        return view('crear_usuario', compact('roles', 'areas', 'localidades', 'supervisores', 'usuarios'));
+        return view('components.crear_usuario', compact('roles', 'areas', 'localidades', 'usuarios'));
+    }
+
+    public function showEditarUsuario(int $id)
+    {
+        $usuario = Usuario::with('infoUsuario')->findOrFail($id);
+        $localidades = Localidad::all();
+        $roles = Rol::all();
+        $areas = Area::all();
+        $usuarios = Usuario::with('infoUsuario')->where('rol_id', '!=', 3)->get(); // Excluyo a los colaboradores
+
+        return view('components.editar_usuario', compact('usuario', 'roles', 'areas', 'localidades', 'usuarios'));
+    }
+    public function updateUsuario(Request $request, int $id)
+    {
+        $usuario = Usuario::findOrFail($id);
+
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellido_paterno' => 'required|string|max:255',
+            'apellido_materno' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:usuarios,email,' . $usuario->id,
+            'password' => 'nullable|string|min:6|confirmed',
+            'rol_id' => 'required|exists:rols,id',
+            'area_id' => 'required|exists:areas,id',
+            'localidad_id' => 'required|exists:localidads,id',
+            'jefe_inmediato_id' => 'nullable|exists:usuarios,id',
+        ]);
+
+        // Actualizar los datos del usuario
+        $usuario->email = $validatedData['email'];
+        if (!empty($validatedData['password'])) {
+            $usuario->password = bcrypt($validatedData['password']);
+        }
+        $usuario->rol_id = $validatedData['rol_id'];
+        $usuario->area_id = $validatedData['area_id'];
+        $usuario->localidad_id = $validatedData['localidad_id'];
+        $usuario->jefe_inmediato_id = $validatedData['jefe_inmediato_id'] ?? null;
+        $usuario->save();
+
+        // Actualizar la información relacionada en la tabla info_usuario
+        $infoUsuario = $usuario->infoUsuario;
+        if ($infoUsuario) {
+            $infoUsuario->nombre = $validatedData['nombre'];
+            $infoUsuario->apellido_paterno = $validatedData['apellido_paterno'];
+            $infoUsuario->apellido_materno = $validatedData['apellido_materno'] ?? null;
+            $infoUsuario->save();
+        }
+
+        return redirect()->route('admin.usuarios')->with('success', 'Usuario actualizado exitosamente.');
     }
 
 
@@ -97,6 +137,32 @@ class AdminController extends Controller
             return redirect()->route('admin.usuarios')->with('error', 'Ocurrió un error al crear el usuario: ' . $e->getMessage());
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function solicitarCambio()
     {

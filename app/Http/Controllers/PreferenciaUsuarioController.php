@@ -44,4 +44,49 @@ class PreferenciaUsuarioController extends Controller
             ], 500);
         }
     }
+
+    public function updateIdioma(Request $request)
+    {
+        try {
+            // 1. Validar la entrada
+            $request->validate([
+                'idioma' => 'required|in:es,en'
+            ]);
+
+            $user = Auth::user();
+
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no autenticado'], 401);
+            }
+
+            PreferenciaUsuario::updateOrCreate(
+                ['usuario_id' => $user->id],
+                ['idioma' => $request->idioma]
+            );
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Preferencia de idioma guardada con éxito'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getTraceAsString() // Nos dará el error exacto si falla SQL
+            ], 500);
+        }
+    }
+
+    public function configuracion()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('auth.login');
+        }
+
+        // Obtener las preferencias del usuario
+        $preferencias = PreferenciaUsuario::where('usuario_id', $user->id)->first();
+
+        return view('preferencias.configuracion', compact('preferencias'));
+    }
 }

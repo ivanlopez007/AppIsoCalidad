@@ -10,12 +10,16 @@
             <h1 class="text-2xl font-black text-gray-800 dark:text-white tracking-tight">Gestión de Usuarios</h1>
             <p class="text-sm text-gray-500 dark:text-gray-400">Administra los accesos, roles y permisos de los usuarios del sistema.</p>
         </div>
-        <button class="inline-flex items-center gap-2 bg-primary text-white font-bold px-5 py-3 rounded-2xl shadow-lg shadow-indigo-200 dark:shadow-none hover:opacity-90 transition-all text-sm">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Nuevo Usuario
-        </button>
+
+        <a href="{{ route('admin.crear_usuario') }}">
+            <butto class="inline-flex items-center gap-2 bg-primary text-white font-bold px-5 py-3 rounded-2xl shadow-lg shadow-indigo-200 dark:shadow-none hover:opacity-90 transition-all text-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Nuevo Usuario
+                </button>
+        </a>
+
     </div>
 
 

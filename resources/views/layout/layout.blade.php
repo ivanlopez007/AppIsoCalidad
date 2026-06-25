@@ -203,9 +203,14 @@
             <div class="p-4 border-t border-gray-100 dark:border-gray-700 relative group flex-shrink-0">
                 <div class="absolute bottom-20 left-4 right-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl invisible opacity-0 scale-95 group-hover:visible group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 z-50 p-2 space-y-1">
 
-                    <a href="{{ route('admin.crear_usuario') }}" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
+                    @if ( Auth::user()->rol->nombre === 'admin' || Auth::user()->rol->nombre === 'calidad' )
+
+                    <a href="{{ route('admin.usuarios') }}" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors font-medium">
                         <i class="fas fa-user-alt w-4"></i> <span>Usuarios</span>
                     </a>
+
+                    @endif
+
 
                     <hr class="border-gray-100 dark:border-gray-700 my-1">
 
@@ -239,15 +244,25 @@
         </aside>
 
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
-            <header class="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 lg:hidden flex-shrink-0">
-                <button onclick="toggleSidebar()" class="p-2 -ml-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                <span class="text-md font-black text-gray-800 dark:text-white tracking-tight">QUASYS</span>
+            <header class="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 flex-shrink-0">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="p-2 -ml-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none lg:hidden">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
 
-                <button id="theme-toggle-mobile" class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300">
+                    <a href="{{ url()->previous() === url()->current() ? '#' : url()->previous() }}"
+                        onclick="if(this.getAttribute('href') === '#') { event.preventDefault(); window.history.back(); }"
+                        class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/50 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl transition-all shadow-sm group">
+                        <i class="fas fa-arrow-left text-gray-500 dark:text-gray-400 group-hover:-translate-x-0.5 transition-transform"></i>
+                        <span class="hidden sm:inline">Regresar</span>
+                    </a>
+                </div>
+
+                <span class="text-md font-black text-gray-800 dark:text-white tracking-tight lg:hidden">QUASYS</span>
+
+                <button id="theme-toggle-mobile" class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 lg:hidden">
                     <i class="fas fa-moon text-md dark:hidden"></i>
                     <i class="fas fa-sun text-md hidden dark:block"></i>
                 </button>
