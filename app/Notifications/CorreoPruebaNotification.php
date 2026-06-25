@@ -12,7 +12,7 @@ class CorreoPruebaNotification extends Notification
     use Queueable;
 
     // Puedes pasarle datos dinámicos a la clase a través del constructor
-    protected $nombreUsuario;
+    protected string $nombreUsuario;
 
     public function __construct($nombreUsuario = 'Usuario')
     {

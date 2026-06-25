@@ -55,7 +55,7 @@
         </div>
 
         {{-- Formulario habilitado para archivos multipart --}}
-        <form action="{{ Route::has('admin.documentos.store') ? route('admin.documentos.store') : '#' }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-8">
+        <form action="{{ route('admin.solicitar_cambio.post') }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-8">
             @csrf
 
             {{-- Campo Oculto del ID de Usuario en Sesión --}}

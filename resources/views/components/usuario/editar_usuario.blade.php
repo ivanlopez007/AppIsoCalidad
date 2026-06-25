@@ -72,19 +72,19 @@
                     @enderror
                 </div>
 
-                {{-- Área (Solo Lectura - Muestra el Área del usuario LOGUEADO) --}}
-                <div class="flex flex-col">
-                    <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Área</label>
-                    <div class="relative">
-                        <input type="text" readonly
-                            value="{{ auth()->user()->area->area ?? 'Sin Área Asignada' }}"
-                            class="w-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-3.5 rounded-xl text-gray-500 dark:text-gray-400 text-base outline-none cursor-not-allowed shadow-sm font-medium">
-
-                        {{-- Envía el ID del área del usuario en sesión activa --}}
-                        <input type="hidden" name="area_id" value="{{ old('area_id', auth()->user()->area_id) }}">
-                    </div>
+                {{-- Área Seleccionable (Dinámica) --}}
+                <div class="flex flex-col space-y-2">
+                    <label class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Área</label>
+                    <select name="area_id" class="w-full px-4 py-3 text-sm bg-white dark:bg-gray-900 border @error('area_id') border-red-500 @else border-gray-200 dark:border-gray-700 @enderror rounded-2xl focus:outline-none focus:border-primary dark:text-white transition-colors shadow-sm">
+                        <option value="" disabled>Seleccione área</option>
+                        @foreach($areas as $ar)
+                        <option value="{{ $ar->id }}" {{ old('area_id', $usuario->area_id) == $ar->id ? 'selected' : '' }}>
+                            {{ $ar->area ?? ($ar->nombre ?? '') }}
+                        </option>
+                        @endforeach
+                    </select>
                     @error('area_id')
-                    <span class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</span>
+                    <span class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</span>
                     @enderror
                 </div>
 
@@ -108,19 +108,19 @@
                     @enderror
                 </div>
 
-                {{-- Localidad (Solo Lectura - Muestra la Localidad del usuario LOGUEADO) --}}
-                <div class="flex flex-col">
-                    <label class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-wide">Localidad</label>
-                    <div class="relative">
-                        <input type="text" readonly
-                            value="{{ auth()->user()->localidad->localidad ?? 'Sin Localidad Asignada' }}"
-                            class="w-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-3.5 rounded-xl text-gray-500 dark:text-gray-400 text-base outline-none cursor-not-allowed shadow-sm font-medium">
-
-                        {{-- Envía el ID de la localidad del usuario en sesión activa --}}
-                        <input type="hidden" name="localidad_id" value="{{ old('localidad_id', auth()->user()->localidad_id) }}">
-                    </div>
+                {{-- Localidad Seleccionable (Dinámica) --}}
+                <div class="flex flex-col space-y-2">
+                    <label class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Localidad</label>
+                    <select name="localidad_id" class="w-full px-4 py-3 text-sm bg-white dark:bg-gray-900 border @error('localidad_id') border-red-500 @else border-gray-200 dark:border-gray-700 @enderror rounded-2xl focus:outline-none focus:border-primary dark:text-white transition-colors shadow-sm">
+                        <option value="" disabled>Seleccione localidad</option>
+                        @foreach($localidades as $loc)
+                        <option value="{{ $loc->id }}" {{ old('localidad_id', $usuario->localidad_id) == $loc->id ? 'selected' : '' }}>
+                            {{ $loc->localidad ?? ($loc->nombre ?? '') }}
+                        </option>
+                        @endforeach
+                    </select>
                     @error('localidad_id')
-                    <span class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</span>
+                    <span class="text-red-500 text-xs font-semibold mt-1">{{ $message }}</span>
                     @enderror
                 </div>
 

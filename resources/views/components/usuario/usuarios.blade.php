@@ -121,7 +121,7 @@
 
 
                     @forelse($usuarios as $usuario)
-                    <tr data-email="{{ Str::lower($usuario->correo) }}" data-role="{{ Str::slug($usuario->rol->nombre ?? '') }}" class="hover:bg-gray-50/50 dark:hover:bg-gray-700/20 transition-colors group">
+                    <tr data-email="{{ $usuario->email }}" data-role="{{ $usuario->infousuario->nombre ?? '' }}" class="hover:bg-gray-50/50 dark:hover:bg-gray-700/20 transition-colors group">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center gap-3">
                                 {{-- Avatar dinámico usando las primeras letras del correo o un patrón estandarizado --}}

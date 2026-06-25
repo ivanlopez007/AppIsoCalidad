@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AppIsoCalidad - Sistema de Gestión de Calidad Inteligente</title>
+    <title>Quasys - Sistema de Gestión de Calidad Inteligente</title>
     <!-- Tailwind CSS desde CDN para desarrollo rápido -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Iconos Lucide/FontAwesome para los detalles visuales -->
@@ -20,7 +20,7 @@
                 <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-md shadow-blue-200">
                     <i class="fa-solid fa-layer-group text-xl"></i>
                 </div>
-                <span class="text-2xl font-black tracking-tight text-slate-900">AppIso<span class="text-blue-600">Calidad</span></span>
+                <span class="text-2xl font-black tracking-tight text-slate-900">Qua<span class="text-blue-600">sys</span></span>
             </div>
 
             <nav class="hidden md:flex items-center gap-8 font-medium text-slate-600">
@@ -214,14 +214,14 @@
                             <h3 class="text-2xl font-bold text-slate-900 mt-1">Plan Profesional</h3>
                             <p class="text-slate-500 text-sm mt-2">Perfecto para PyMEs que inician su camino a la certificación.</p>
                             <div class="mt-6 flex items-baseline text-slate-900">
-                                <span class="text-5xl font-black tracking-tight">$149</span>
+                                <span class="text-5xl font-black tracking-tight">$XXX</span>
                                 <span class="ml-1 text-xl font-semibold text-slate-500">/mes</span>
                             </div>
                             <ul class="mt-6 space-y-4 text-slate-600 text-sm">
                                 <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Hasta 20 usuarios activos</li>
                                 <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Control de Documentos (10 GB)</li>
-                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Módulo de No Conformidades</li>
-                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Soporte por correo electrónico</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Módulo Gestion de documentos</li>
+                                
                             </ul>
                         </div>
                         <a href="#contacto" class="mt-8 block text-center bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 rounded-xl transition-colors">Empezar Ahora</a>
@@ -235,15 +235,14 @@
                             <h3 class="text-2xl font-bold text-slate-900 mt-1">Plan Enterprise</h3>
                             <p class="text-slate-500 text-sm mt-2">Para organizaciones maduras con necesidades avanzadas.</p>
                             <div class="mt-6 flex items-baseline text-slate-900">
-                                <span class="text-5xl font-black tracking-tight">$299</span>
+                                <span class="text-5xl font-black tracking-tight">$XXX</span>
                                 <span class="ml-1 text-xl font-semibold text-slate-500">/mes</span>
                             </div>
                             <ul class="mt-6 space-y-4 text-slate-600 text-sm">
                                 <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> <strong>Usuarios Ilimitados</strong></li>
                                 <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Almacenamiento Ilimitado</li>
-                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Todos los módulos incluidos</li>
-                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> APIs e Integraciones personalizadas</li>
                                 <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Soporte Prioritario 24/7</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-500"></i> Módulo Tracking</li>
                             </ul>
                         </div>
                         <a href="#contacto" class="mt-8 block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md shadow-blue-500/10">Solicitar Demo</a>
@@ -282,7 +281,7 @@
     <footer class="bg-slate-950 text-slate-500 text-sm py-12 border-t border-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-2">
-                <span class="text-lg font-bold text-white tracking-tight">AppIso<span class="text-blue-500">Calidad</span></span>
+                <span class="text-lg font-bold text-white tracking-tight">Qua<span class="text-blue-500">sys</span></span>
                 <span class="text-xs">&copy; 2026 Todos los derechos reservados.</span>
             </div>
             <div class="flex gap-6">

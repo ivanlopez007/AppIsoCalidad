@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cambio_documentos', function (Blueprint $table) {
             $table->id();
-            $table->string('folio')->unique();
+            $table->string('folio');
             $table->string('nombre_documento');
             $table->foreignId('usuario_id')->constrained('usuarios');
             $table->foreignId('nivel_id')->constrained('nivels');
@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('url_documento');
             $table->integer('version');
             $table->string('numero_iso');
-            $table->foreignId('aprobar_id')->constrained('usuarios');
+            $table->foreignId('aprobar_id')->nullable()->constrained('usuarios');
+            $table->foreignId('estatus_id')->constrained('estatus');
             $table->foreignId('localidad_id')->constrained('localidads');
             $table->foreignId('area_id')->constrained('areas');
             $table->foreignId('tipo_solicitud_id')->constrained('tipo_solicituds');

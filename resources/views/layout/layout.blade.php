@@ -58,7 +58,7 @@
     'hijos' => [
     ['nombre' => 'Solicitud de cambios', 'ruta' => 'admin.solicitar_cambio'],
     ['nombre' => 'Aprobación de Solicitud', 'ruta' => 'admin.aprobacion'],
-    ['nombre' => 'Revision de Solicitudes', 'ruta' => '#'],
+    ['nombre' => 'Revision de Solicitudes', 'ruta' => 'admin.revision'],
     ['nombre' => 'Consulta de documentos', 'ruta' => '#'],
     ['nombre' => 'Historial de documentos', 'ruta' => 'admin.historial'],
     ['nombre' => 'Matriz de documentos', 'ruta' => 'admin.formato'],

@@ -19,6 +19,7 @@ class CambioDocumento extends Model
         'aprobar_id',
         'localidad_id',
         'area_id',
+        'estatus_id',
         'tipo_solicitud_id',
         'lugar_retencion_id',
         'periodo_retencion_id',
@@ -70,5 +71,9 @@ class CambioDocumento extends Model
     public function disposicionFinal()
     {
         return $this->belongsTo(DisposicionFinal::class, 'disposicion_final_id');
+    }
+    public function estatu()
+    {
+        return $this->belongsTo(Estatu::class, 'estatus_id');
     }
 }

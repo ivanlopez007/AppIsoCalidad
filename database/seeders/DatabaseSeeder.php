@@ -11,9 +11,11 @@ use App\Models\InfoUsuario;
 use App\Models\Nivel;
 use App\Models\Subnivel;
 use App\Models\DisposicionFinal;
+use App\Models\Estatu;
 use App\Models\LugarRetencion;
 use App\Models\PeriodoRetencion;
 use App\Models\TipoSolicitud;
+use App\Models\Estatus; // <-- Importación del nuevo modelo
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,6 +28,12 @@ class DatabaseSeeder extends Seeder
         // ==========================================
         // 1. NUEVOS CATÁLOGOS BASE (MÓDULO DOCUMENTAL)
         // ==========================================
+
+        // Catálogo: Estatus
+        $estatusDatos = ['Pendiente', 'Aprobado', 'Rechazado'];
+        foreach ($estatusDatos as $est) {
+            Estatu::create(['estatus' => $est]); // <-- Utiliza exactamente la columna 'estatu' de tu modelo
+        }
 
         // Estructura de Niveles y Subniveles
         $nivelesDatos = [

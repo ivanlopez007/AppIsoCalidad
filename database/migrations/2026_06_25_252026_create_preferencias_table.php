@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prueba', function (Blueprint $table) {
+        Schema::create('preferencia_usuarios', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
+            $table->string('tema')->default(''); // pero lo tengo con tailwind, asi que no es necesario
+            $table->string('idioma')->default('es'); // es, en, fr
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prueba');
+        Schema::dropIfExists('preferencia_usuarios');
     }
 };

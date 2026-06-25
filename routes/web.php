@@ -57,24 +57,29 @@ Route::middleware([])->controller(AdminController::class)->prefix('admin')->grou
 
 
 
+    //Rutas para la gestión de usuarios
     Route::get('/usuarios',         'showUsuarios')->name('admin.usuarios');
-    //Rutas de usuarios
-
     Route::get('crear-usuario',         'showCrearUsuario')->name('admin.crear_usuario');
     Route::post('crear-usuario',        'crearUsuario')->name('admin.crear_usuario.post');
-
-
     Route::get('editar-usuario/{id}',   'showEditarUsuario')->name('admin.editar_usuario');
-
     Route::put('editar-usuario/{id}',  'updateUsuario')->name('admin.editar_usuario.put');
     Route::delete('eliminar-usuario/{id}', 'eliminarUsuario')->name('admin.eliminar_usuario.delete');
 
 
+    // Agregar, borrar o editar documentos
+    Route::get('/solicitar-cambio', 'showSolicitarCambio')->name('admin.solicitar_cambio');
+    Route::post('/solicitar-cambio', 'solicitarCambio')->name('admin.solicitar_cambio.post');
 
-    Route::get('/solicitar-cambio', 'solicitarCambio')->name('admin.solicitar_cambio');
+    
+    Route::get('/revision', 'showRevisionSolicitudes')->name('admin.revision');
+    Route::get('/aprobacion',       'showAprobacion')->name('admin.aprobacion');
+
+    Route::post('/revision/aprobar/{id}', 'aprobarSolicitud')->name('admin.revision.aprobar');
+    Route::post('/revision/rechazar/{id}', 'rechazarSolicitud')->name('admin.revision.rechazar');
+    Route::post('/descargar-pdf/{id}', 'descargarPdf')->name('admin.revision.descargar_pdf');
+
     Route::get('/historial', 'historial')->name('admin.historial');
     Route::get('/formato', 'formato')->name('admin.formato');
-    Route::get('/aprobacion',       'aprobacion')->name('admin.aprobacion');
 });
 
 
