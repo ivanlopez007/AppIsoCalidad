@@ -70,7 +70,7 @@ Route::middleware([])->controller(AdminController::class)->prefix('admin')->grou
     Route::get('/solicitar-cambio', 'showSolicitarCambio')->name('admin.solicitar_cambio');
     Route::post('/solicitar-cambio', 'solicitarCambio')->name('admin.solicitar_cambio.post');
 
-    
+
     Route::get('/revision', 'showRevisionSolicitudes')->name('admin.revision');
     Route::get('/aprobacion',       'showAprobacion')->name('admin.aprobacion');
 
@@ -78,7 +78,7 @@ Route::middleware([])->controller(AdminController::class)->prefix('admin')->grou
     Route::post('/revision/rechazar/{id}', 'rechazarSolicitud')->name('admin.revision.rechazar');
     Route::post('/descargar-pdf/{id}', 'descargarPdf')->name('admin.revision.descargar_pdf');
 
-    Route::get('/historial', 'historial')->name('admin.historial');
+    Route::get('/historial', 'showHistorial')->name('admin.historial');
     Route::get('/formato', 'formato')->name('admin.formato');
 });
 

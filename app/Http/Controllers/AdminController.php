@@ -327,10 +327,15 @@ class AdminController extends Controller
             'conteoRechazados'
         ));
     }
-    public function historial()
+    public function showHistorial()
     {
-        return view('components.documento.historial');
+        // Obtenemos los documentos oficiales vigentes de la tabla documentos
+        $documentos = Documento::with('area')->get();
+
+        return view('components.documento.historial', compact('documentos'));
     }
+
+
     public function formato()
     {
         return view('components.documento.formato');
@@ -404,7 +409,7 @@ class AdminController extends Controller
         }
     }
 
-    
+
     public function rechazarSolicitud(int $id)
     {
         $solicitud = CambioDocumento::where('id', $id)
