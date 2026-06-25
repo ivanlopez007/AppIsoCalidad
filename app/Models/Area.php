@@ -27,4 +27,9 @@ class Area extends Model
     {
         return $this->hasMany(CambioDocumento::class, 'area_id');
     }
+
+    public function documentos()
+    {
+        return $this->hasMany(Documento::class, 'area_id');
+    }
 }

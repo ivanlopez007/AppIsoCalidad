@@ -23,4 +23,5 @@ class Nivel extends Model
     {
         return $this->hasMany(CambioDocumento::class, 'nivel_id');
     }
+    
 }

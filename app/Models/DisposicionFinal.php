@@ -15,4 +15,8 @@ class DisposicionFinal extends Model
     {
         return $this->hasMany(CambioDocumento::class, 'disposicion_final_id');
     }
+    public function documentos()
+    {
+        return $this->hasMany(Documento::class, 'disposicion_final_id');
+    }
 }

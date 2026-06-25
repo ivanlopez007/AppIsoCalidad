@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\CambioDocumento;
 use App\Models\DisposicionFinal;
+use App\Models\Documento;
 use App\Models\Localidad;
 use App\Models\LugarRetencion;
 use App\Models\Nivel;
@@ -18,6 +19,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -358,20 +360,51 @@ class AdminController extends Controller
 
     public function aprobarSolicitud(int $id)
     {
+        // Iniciamos la transacción para proteger la integridad de tus datos
+        DB::beginTransaction();
+
         try {
+            // 1. Buscar la solicitud pendiente asignada al aprobador actual
             $solicitud = CambioDocumento::where('id', $id)
                 ->where('aprobar_id', Auth::id())
                 ->firstOrFail();
 
-            // Cambiamos el estatus a Aprobado (ID: 2)
-            $solicitud->update(['estatus_id' => 2, 'updated_at' => now()]);
+            // 2. Crear el nuevo registro oficial en la tabla 'documentos'
+            Documento::create([
+                'nombre_documento'     => $solicitud->nombre_documento,
+                'usuario_id'           => $solicitud->usuario_id,
+                'nivel_id'             => $solicitud->nivel_id,
+                'sub_nivel_id'         => $solicitud->sub_nivel_id,
+                'url_documento'        => $solicitud->url_documento,
+                'version'              => $solicitud->version,
+                'numero_iso'           => $solicitud->numero_iso,
+                'aprobar_id'           => $solicitud->aprobar_id,
+                'localidad_id'         => $solicitud->localidad_id,
+                'area_id'              => $solicitud->area_id,
+                'lugar_retencion_id'   => $solicitud->lugar_retencion_id,
+                'periodo_retencion_id' => $solicitud->periodo_retencion_id,
+                'disposicion_final_id' => $solicitud->disposicion_final_id,
+            ]);
 
-            return redirect()->back()->with('success', "La solicitud {$solicitud->folio} ha sido aprobada con éxito.");
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Ocurrió un error al aprobar la solicitud: ' . $e->getMessage());
+            // 3. Actualizar el estatus de la solicitud a Aprobado (ID: 2)
+            $solicitud->update([
+                'estatus_id' => 2,
+                'updated_at' => now()
+            ]);
+
+            // Guardamos de manera definitiva ambos movimientos en la BD
+            DB::commit();
+
+            return redirect()->back()->with('success', "La solicitud {$solicitud->folio} ha sido aprobada y el documento se ha creado correctamente.");
+        } catch (\Exception $e) {
+            // Si algo falla al crear el documento, cancelamos el cambio de estatus de la solicitud
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'Ocurrió un error al procesar la aprobación: ' . $e->getMessage());
         }
     }
 
+    
     public function rechazarSolicitud(int $id)
     {
         $solicitud = CambioDocumento::where('id', $id)

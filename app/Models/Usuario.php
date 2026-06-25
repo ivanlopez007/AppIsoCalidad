@@ -98,8 +98,19 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(CambioDocumento::class, 'usuario_id');
     }
+
     public function cambiosDocumentoAprobados()
     {
         return $this->hasMany(CambioDocumento::class, 'aprobar_id');
     }
+
+    public function documentosAprobados()
+    {
+        return $this->hasMany(Documento::class, 'aprobar_id');
+    }
+    public function documentos()
+    {
+        return $this->hasMany(Documento::class, 'usuario_id');
+    }
+
 }

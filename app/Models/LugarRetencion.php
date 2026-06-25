@@ -15,4 +15,9 @@ class LugarRetencion extends Model
     {
         return $this->hasMany(CambioDocumento::class, 'lugar_retencion_id');
     }
+
+    public function documentos()
+    {
+        return $this->hasMany(Documento::class, 'lugar_retencion_id');
+    }
 }

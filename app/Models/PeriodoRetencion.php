@@ -17,5 +17,10 @@ class PeriodoRetencion extends Model
         return $this->hasMany(CambioDocumento::class, 'periodo_retencion_id');
     }
 
+    public function documentos()
+    {
+        return $this->hasMany(Documento::class, 'periodo_retencion_id');
+    }
+
 
 }

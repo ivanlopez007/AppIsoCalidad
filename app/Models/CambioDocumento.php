@@ -76,4 +76,9 @@ class CambioDocumento extends Model
     {
         return $this->belongsTo(Estatu::class, 'estatus_id');
     }
+
+    public function documento()
+    {
+        return $this->belongsTo(Documento::class, 'documento_id');
+    }
 }
